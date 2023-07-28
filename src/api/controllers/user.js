@@ -3,8 +3,6 @@ import bcrypt from "bcryptjs";
 
 // CRUD
 export const createUser = async (req, res) => {
-    console.log("hello");
-
     const {
         username,
         password

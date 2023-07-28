@@ -12,11 +12,17 @@ const userSchema = mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ["user", "admin"],
-        default: "user",
+        enum: ["student", "admin", "teacher"],
+        default: "student",
     },
-    conversation: {
-        type: Array,
+    name: {
+        type: String,
+        required: true
+    },
+    reputation: {
+        type: Number,
+        required: true,
+        default: 0
     }
 });
 

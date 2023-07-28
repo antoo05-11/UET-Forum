@@ -4,9 +4,6 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import router from "./api/routes";
 import bodyParser from "body-parser";
-import {
-    appSocket
-} from "./api/socket/socket";
 
 dotenv.config();
 
@@ -29,16 +26,13 @@ app.use((err, req, res, next) => {
     } = err;
     res.status(status).json({
         message
-    });
+    });  
 });
 
-const PORT = process.env.PORT || 5050;;
+const PORT = process.env.PORT || 5050;; 
 server.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`);
 })
-var io = require('socket.io')(server);
-appSocket(io);
-export default io;
 
 app.get("/", (req, res) => {
     res.status(200).json({
@@ -52,15 +46,12 @@ app.use("/api", router);
 app.use('/login', (req, res) => {
     res.sendFile(__dirname + '/public/login.html');
 })
-app.use('/chat', (req, res) => {
-    res.sendFile(__dirname + '/public/chat.html')
-})
 
 
 // Database
 const mongoose = require('mongoose');
 (async () => {
-    mongoose.connect('mongodb://localhost:27017/chat-app', {
+    mongoose.connect(process.env.MONGODB_URL, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
         })
