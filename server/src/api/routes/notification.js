@@ -2,9 +2,7 @@ import {
     Router
 } from "express";
 
-import {
-
-} from "../controllers/notification";
+import { showNotification } from "../controllers/notification";
 
 import {
     verifyToken
@@ -14,5 +12,6 @@ import catchAsync from "../exceptions/catch-async";
 
 const notificationRoute = new Router;
 
+notificationRoute.get("/", verifyToken, catchAsync(showNotification));
 
 export default notificationRoute;

@@ -45,7 +45,7 @@ export const getPost = async (req, res) => {
 export const createPost = async (req, res) => {
     let newPost = {
         rootID: req.body.rootID,
-        authorID: req.user.id,
+        author: req.user.id,
         title: req.body.title,
         content: req.body.content
     }
