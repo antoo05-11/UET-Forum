@@ -35,6 +35,9 @@ const postSchema = mongoose.Schema({
         required: true,
         default: 0
     },
+    tags: [{
+        type: Schema.Types.ObjectId
+    }],
     answers: [{
         author: {
             type: Schema.Types.ObjectId,
