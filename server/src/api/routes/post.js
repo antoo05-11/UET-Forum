@@ -21,5 +21,4 @@ postRoute.post("/AIanswerPost", verifyToken, catchAsync(AIanswerPost));
 postRoute.post("/updatePost", verifyToken, catchAsync(updatePost));
 postRoute.post("/votePost", verifyToken, catchAsync(votePost));
 
-
 export default postRoute;
