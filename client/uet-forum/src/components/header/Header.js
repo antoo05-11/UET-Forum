@@ -6,7 +6,10 @@ import LoginModal from "./login/LoginModal";
 import RegisterModal from "./register/RegisterModal";
 import LogoutBtn from "./logout/LogoutBtn";
 import NavBar from "./nav-bar/NavBar";
+import { Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 export function CheckAthorization(props) {
+    const params = useParams();
     if (props.name == '') {
         return (
             <div class="col-sm-2 d-flex justify-content-around">
@@ -20,7 +23,8 @@ export function CheckAthorization(props) {
     else {
         return (
             <div class="col-sm-2 d-flex justify-content-around">
-                <p>Hello, {props.name}</p>
+                
+                <p>Hello,<Link to = {`/user`}> {props.name}</Link></p>
                 <LogoutBtn />
             </div>
         )
@@ -30,7 +34,7 @@ export default function Header() {
 
     const [username, setUsername] = useState("");
     useEffect(() => {
-        axios.get('http://localhost:5050/api/user/view', {
+        axios.get(`http://localhost:5050/api/user/view`, {
             headers: {
                 Authorization: `Bearer ${window.localStorage.getItem("token")}`
             }
@@ -47,8 +51,6 @@ export default function Header() {
         <div class="container-fluid">
             <div class="row">
                 <NavBar />
-
-
                 <CheckAthorization name={username} />
                 
             </div>
