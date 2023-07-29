@@ -6,8 +6,7 @@ import mongoose, {
 const threadSchema = mongoose.Schema({
     rootID: {
         type: Schema.Types.ObjectId,
-        ref: 'Thread',
-        required: true
+        ref: 'Thread'
     },
     title: {
         type: String,

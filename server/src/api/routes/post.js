@@ -5,7 +5,8 @@ import {
     AIanswerPost,
     createPost,
     getPost,
-    updatePost
+    updatePost,
+    votePost,
 } from "../controllers/post";
 import catchAsync from "../exceptions/catch-async";
 import {
@@ -18,6 +19,7 @@ postRoute.post("/getPost", getPost);
 postRoute.post("/createPost", verifyToken, catchAsync(createPost));
 postRoute.post("/AIanswerPost", verifyToken, catchAsync(AIanswerPost));
 postRoute.post("/updatePost", verifyToken, catchAsync(updatePost));
+postRoute.post("/votePost", verifyToken, catchAsync(votePost));
 
 
 export default postRoute;

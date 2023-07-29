@@ -48,6 +48,11 @@ const postSchema = mongoose.Schema({
             min: 0,
             required: true,
             default: 0
+        },
+        lastUpdated: {
+            type: Date,
+            require: true,
+            default: Date.now()
         }
     }]
 
