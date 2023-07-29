@@ -67,21 +67,24 @@ export const answerPost = async (req, res) => {
 
     let newAnswer = {
         author: req.user.id,
+        postID: req.body.postID,
         rootID: req.body.rootID,
         content: req.body.content
     }
-    await Answer.create(newAnswer).then((answer));
-    await Post.findOneAndUpdate({
-        _id: rootID
-    }, {
-        $push: {
-            answers: newAnswer
-        }
-    }, {
-        new: true
-    }).then((post) => {
-        if (!post) res.status(404);
-        return res.status(200).json(newAnswer);
+    await Answer.create(newAnswer).then((answer) => {
+        if(!answer) res.status(404);
+        Post.findOneAndUpdate({
+            _id: rootID
+        }, {
+            $push: {
+                answers: answer.id
+            }
+        }, {
+            new: true
+        }).then((post) => {
+            if (!post) res.status(404);
+            return res.status(200).json(newAnswer);
+        });
     });
 }
 export const AIanswerPost = async (req, res) => {

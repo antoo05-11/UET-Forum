@@ -4,7 +4,13 @@ import mongoose, {
 
 const answerSchema = mongoose.Schema({
     rootID: {
-        type: Schema.Types.ObjectId
+        type: Schema.Types.ObjectId,
+        ref: 'Answer'
+    },
+    postID: {
+        type: Schema.Types.ObjectId,
+        ref: 'Post',
+        required: true
     },
     lastUpdated: {
         type: Date,
