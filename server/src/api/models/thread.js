@@ -32,7 +32,12 @@ const threadSchema = mongoose.Schema({
     },
     childrens: [{
         type: Schema.Types.ObjectId
-    }]
+    }],
+    isAlive: {
+        type: Boolean,
+        required: true,
+        default: true
+    }
 });
 
 export default mongoose.model("Thread", threadSchema);

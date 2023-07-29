@@ -1,7 +1,6 @@
 import mongoose, {
     Schema
 } from "mongoose";
-import user from "./user";
 
 const postSchema = mongoose.Schema({
     rootID: {
