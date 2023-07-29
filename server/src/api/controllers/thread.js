@@ -21,7 +21,18 @@ export const getThread = async (req, res) => {
     let rootID = req.params.id;
 
     const thread = await Thread.findById(rootID);
-    if (!thread.isAlive) return res.status(404);
+    if (!thread && !thread.isAlive) return res.status(404);
+
+    let threadRoots = [];
+    if (thread.rootID) {
+        await Thread.findById(thread.rootID).then((thread) => {
+            threadRoots.push(thread);
+            if (thread.rootID != null)
+                Thread.findById(thread.rootID).then(thread => {
+                    threadRoots.push(thread);
+                });
+        });
+    }
 
     let children;
     if (thread.type == 1) {
@@ -34,7 +45,6 @@ export const getThread = async (req, res) => {
             })
             .skip(PAGE_LIMIT * (page - 1))
             .limit(PAGE_LIMIT);
-        console.log(children);
     } else {
         children = await Post.find({
                 "rootID": rootID,
@@ -45,11 +55,11 @@ export const getThread = async (req, res) => {
             })
             .skip(PAGE_LIMIT * (page - 1))
             .limit(PAGE_LIMIT);
-        console.log(children);
     }
 
     return res.status(200).json({
         thread,
+        threadRoots,
         children
     });
 };
