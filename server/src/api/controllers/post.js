@@ -3,37 +3,55 @@ import Answer from "../models/answer";
 import Post from "../models/post";
 import Thread from "../models/thread";
 import User from "../models/user";
-import {
-    pushNotification
-} from "./notification";
+import { pushNotification } from "./notification";
 
+const PAGE_LIMIT = 10;
 
-export const getAllPosts = async (req, res) => {
-    let rootID = req.body.rootID;
-    let thread = await thread.findById(rootID);
-    if (!thread.isAlive) return res.status(404);
-    let posts = Post.find({
-        rootID: rootID,
-        isAlive: true
-    });
-    res.status(200).json({
-        thread,
-        posts
-    });
-}
+// export const getAllPosts = async (req, res) => {
+//     const threadID = req.params.threadID;
+//     const page = req.query.page;
+//     const sort = req.query.sort;
+    
+//     const thread = await Thread.findById(threadID);
+//     if (!thread || !thread.isAlive) throw new HttpException(404, "Thread not found");
+
+//     const posts = await Post.find({ rootID: threadID, isAlive: true });
+//     if (!posts) throw new HttpException(404, "Posts not found");
+
+//     console.log(posts);
+
+//     res.status(200).json({ thread, posts });
+// }
 
 export const getPost = async (req, res) => {
-    let post = await Post.findById(req.params.id);
-    if (!post) return res.status(404);
+    let page = req.query.page;
+    if (!page) page = 1;
+
+    let sort = req.query.sort;
+    if (!sort) sort = "dateTime";
+
+    let order = req.query.order;
+    if (!order) order = "1";
+
+    let post = await Post.findById(req.params.postID);
+    if (!post) throw new HttpException(404, "Post not found");
 
     post = JSON.parse(JSON.stringify(post));
-    await User.findById(post.authorID).then((user) => {
-        if (!user) return;
+
+    await User.findById(post.author).then((user) => {
+        if (!user) throw new HttpException(404, "User not found");
         post.authorName = user.username;
     })
-    let answers = await Answer.find({
+
+    const answers = await Answer.find({
         postID: post._id
-    });
+    }).sort({
+        [sort]: parseInt(order)
+    }).skip(
+        PAGE_LIMIT * (page - 1)
+    ).limit(PAGE_LIMIT);
+    if (!answers) throw new HttpException(404, "Answers not found");
+
     let fullAns = [];
     for (const answer of answers) {
         await User.findById(answer.author).then((user) => {
@@ -44,16 +62,13 @@ export const getPost = async (req, res) => {
         });
     }
 
-    return res.status(200).json({
-        post,
-        fullAns
-    });
+    return res.status(200).json({ post, fullAns });
 }
 
 
 export const createPost = async (req, res) => {
     let newPost = {
-        rootID: req.body.rootID,
+        rootID: req.body.threadID,
         author: req.user.id,
         title: req.body.title,
         content: req.body.content
@@ -75,7 +90,7 @@ export const createPost = async (req, res) => {
 }
 
 export const updatePost = async (req, res) => {
-    await Post.findById(req.params.id).then((post) => {
+    await Post.findById(req.params.postID).then((post) => {
         if (!post) return res.status(200);
         post.content = req.body.content;
         post.lastUpdated = Date.now();
@@ -88,7 +103,7 @@ export const updatePost = async (req, res) => {
 }
 
 export const answerPost = async (req, res) => {
-    const postID = req.params.id;
+    const postID = req.params.postID;
     const post = await Post.findById(postID);
 
     let newAnswer = {
@@ -106,7 +121,9 @@ export const answerPost = async (req, res) => {
     if (!updatedPost) throw new HttpException(404, "Error update post")
 
     pushNotification([post.author], {
-        "post": post.title,
+        "post": updatedPost.id,
+        "answer": createdAnswer.id,
+        "title": updatedPost.title,
         "action": "answer"
     });
 
@@ -114,7 +131,7 @@ export const answerPost = async (req, res) => {
 }
 
 export const AIanswerPost = async (req, res) => {
-    let postID = req.params.id;
+    let postID = req.params.postID;
     const post = await Post.findOne({
         _id: postID
     });
@@ -122,7 +139,7 @@ export const AIanswerPost = async (req, res) => {
     const bard = require("fix-esm").require("bard-ai");
     await bard.init(process.env.BARD_COOKIE);
     let newAnswer = {
-        postID: req.params.id,
+        postID: req.params.postID,
         content: await bard.askAI(post.content)
     }
     await Answer.create(newAnswer).then((answer) => {
@@ -154,7 +171,7 @@ export const votePost = async (req, res) => {
         }
         let reputation = user.reputation;
         if (reputation < MIN_REPU_VOTE_UP) return res.status(400).json();
-        Post.findById(req.params.id)
+        Post.findById(req.params.postID)
             .then((post) => {
                 if (!post) {
                     return res.status(404).json();
@@ -178,7 +195,7 @@ export const votePost = async (req, res) => {
 }
 
 export const closePost = async (req, res) => {
-    await Post.findById(req.params.id).then((post) => {
+    await Post.findById(req.params.postID).then((post) => {
         if (!post) return res.status(404);
         post.isAlive = false;
         post.save();
@@ -187,7 +204,7 @@ export const closePost = async (req, res) => {
 }
 
 export const reopenPost = async (req, res) => {
-    await Post.findById(req.params.id).then((post) => {
+    await Post.findById(req.params.postID).then((post) => {
         if (!post) return res.status(404);
         post.isAlive = true;
         post.save();

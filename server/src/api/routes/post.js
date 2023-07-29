@@ -7,7 +7,7 @@ import {
     closePost,
     createPost,
     deletePost,
-    getAllPosts,
+    // getAllPosts,
     getPost,
     reopenPost,
     updatePost,
@@ -20,14 +20,14 @@ import {
 
 const postRoute = new Router;
 
-postRoute.get("/", getAllPosts);
-postRoute.get("/:id", getPost);
+// postRoute.get("/:threadID/:page?", getAllPosts);
+postRoute.get("/:postID", getPost);
 postRoute.post("/create", verifyToken, catchAsync(createPost));
-postRoute.post("/:id/AIanswer", verifyToken, catchAsync(AIanswerPost));
-postRoute.put("/:id/edit", verifyToken, catchAsync(updatePost));
-postRoute.put("/:id/vote", verifyToken, catchAsync(votePost));
-postRoute.put(":id/close", verifyToken, catchAsync(closePost));
-postRoute.put("/:id/reopen", verifyToken, catchAsync(reopenPost));
-postRoute.post("/:id/answer", verifyToken, catchAsync(answerPost));
+postRoute.post("/:postID/AIanswer", verifyToken, catchAsync(AIanswerPost));
+postRoute.put("/:postID/edit", verifyToken, catchAsync(updatePost));
+postRoute.put("/:postID/vote", verifyToken, catchAsync(votePost));
+postRoute.put("/:postID/close", verifyToken, catchAsync(closePost));
+postRoute.put("/:postID/reopen", verifyToken, catchAsync(reopenPost));
+postRoute.post("/:postID/answer", verifyToken, catchAsync(answerPost));
 
 export default postRoute;
