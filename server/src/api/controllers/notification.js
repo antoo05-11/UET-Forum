@@ -10,6 +10,7 @@ export const pushNotification = async function(users, content) {
     await Notification.insertMany(notifications);
 };
 
-// export const showNotification = async (req, res) => {
-//     const user = req.user;
-// };
+export const showNotification = async (req, res) => {
+    const user = req.user;
+    
+};
