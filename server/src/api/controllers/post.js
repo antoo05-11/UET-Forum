@@ -1,7 +1,9 @@
+import HttpException from "../exceptions/http-exception";
 import Answer from "../models/answer";
 import Post from "../models/post";
 import Thread from "../models/thread";
 import User from "../models/user";
+import { pushNotification } from "./notification";
 
 
 export const getAllPosts = async (req, res) => {
@@ -66,31 +68,33 @@ export const updatePost = async (req, res) => {
         console.log(error);
     });
 }
-export const answerPost = async (req, res) => {
-    let rootID = req.params.id;
 
+export const answerPost = async (req, res) => {
+    const postID = req.params.id;
+    const post = await Post.findById(postID);
+    
     let newAnswer = {
         author: req.user.id,
-        postID: req.body.postID,
+        postID: postID,
         rootID: req.body.rootID,
         content: req.body.content
     }
-    await Answer.create(newAnswer).then((answer) => {
-        if (!answer) res.status(404);
-        Post.findOneAndUpdate({
-            _id: rootID
-        }, {
-            $push: {
-                answers: answer.id
-            }
-        }, {
-            new: true
-        }).then((post) => {
-            if (!post) res.status(404);
-            return res.status(200).json(newAnswer);
-        });
+    
+    const createdAnswer = await Answer.create(newAnswer);
+    if (!createdAnswer) throw new HttpException(404, "Error create answer");
+
+    post.answers.push(createdAnswer.id);
+    const updatedPost = await post.save();
+    if (!updatedPost) throw new HttpException(404, "Error update post")
+    
+    pushNotification([ post.author ], {
+        "post": post.title,
+        "action": "answer" 
     });
+
+    return res.status(200).json(newAnswer);
 }
+
 export const AIanswerPost = async (req, res) => {
     let rootID = req.body.id;
     const post = await Post.findOne({

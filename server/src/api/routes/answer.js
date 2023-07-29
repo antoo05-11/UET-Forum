@@ -6,5 +6,7 @@ import {
 } from "../controllers/answers";
 
 const answerRoute = new Router;
+
 answerRoute.get("/:id", getAnswer);
+
 export default answerRoute;
