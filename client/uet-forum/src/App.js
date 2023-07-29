@@ -1,6 +1,7 @@
 import './App.css';
 import Home from './components/home/Home'
 import Header from './components/header/Header'
+import Post from './components/post/Post';
 import { useParams } from 'react-router-dom';
 import {
   BrowserRouter as Router,
@@ -11,14 +12,6 @@ import {
 import MainThread from './components/main-thread/MainThread';
 import SubThread from './components/sub-thread/SubThread';
 
-export function Post() {
-  const params = useParams();
-  return (
-    <h1>
-      Post {params.postID}
-    </h1>
-  )
-}
 
 export default function App() {
   return (
@@ -26,9 +19,9 @@ export default function App() {
       <Header />
       <Routes>
         <Route path='/' element={<Home />} />
-        <Route path='/p/:postID' element={<Post />} />
         <Route path='/mt/:threadID' element={<MainThread />} />
         <Route path='/st/:threadID' element={<SubThread />} />
+        <Route path='/p/:threadID' element={<Post />} />
       </Routes>
     </Router>
   );

@@ -23,7 +23,7 @@ export default function MainThread() {
             <br/>
         {childThreadList.map((childThread) =>
             <>
-                <h2><Link to={`st/${childThread._id}`}>{childThread.title}</Link></h2>
+                <h2><Link to={`/st/${childThread._id}`}>{childThread.title}</Link></h2>
                 <br />
             </>
             )}
