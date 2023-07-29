@@ -1,27 +1,58 @@
+import Answer from "../models/answer";
 import Post from "../models/post";
+import Thread from "../models/thread";
 import User from "../models/user";
 
 
-export const getPost = (req, res) => {
-    res.json();
+export const getAllPosts = async (req, res) => {
+    let rootID = req.body.rootID;
+    let thread = await thread.findById(rootID);
+    if (!thread.isAlive) return res.status(404);
+    let posts = Post.find({
+        rootID: rootID,
+        isAlive: true
+    });
+    res.status(200).json({
+        thread,
+        posts
+    });
 }
+
+export const getPost = async (req, res) => {
+    let post = await Post.findById(req.params.id);
+    if (!post) return res.status(404);
+    return res.status(200).json({
+        post
+    });
+}
+
 
 export const createPost = async (req, res) => {
     let newPost = {
-        rootID: "64c3de5efb8519ccb86b9789",
+        rootID: req.body.rootID,
         authorID: req.user.id,
         title: req.body.title,
         content: req.body.content
     }
-    await Post.create(
-        newPost
-    );
-    return res.status(200).json(req.body);
+    await Post.create(newPost).then((post) => {
+        Thread.findOneAndUpdate({
+            _id: newPost.rootID
+        }, {
+            $push: {
+                children: post.id
+            }
+        }, {
+            new: true
+        }).then((thread) => {
+            if (!thread) return res.status(404);
+            return res.status(200).json(newPost);
+        });
+    });
 }
 
 export const updatePost = async (req, res) => {
-    let rootID = req.body.id;
-    await Post.findById(rootID).then((post) => {
+    await Post.findById(req.params.id).then((post) => {
+        if (!post) return res.status(200);
         post.content = req.body.content;
         post.lastUpdated = Date.now();
         post.title = req.body.title;
@@ -32,12 +63,14 @@ export const updatePost = async (req, res) => {
     });
 }
 export const answerPost = async (req, res) => {
-    let rootID = req.body.id;
+    let rootID = req.params.id;
 
     let newAnswer = {
         author: req.user.id,
+        rootID: req.body.rootID,
         content: req.body.content
     }
+    await Answer.create(newAnswer).then((answer));
     await Post.findOneAndUpdate({
         _id: rootID
     }, {
@@ -89,7 +122,7 @@ export const votePost = async (req, res) => {
         }
         let reputation = user.reputation;
         if (reputation < MIN_REPU_VOTE_UP) return res.status(400).json();
-        Post.findById(req.body.id)
+        Post.findById(req.params.id)
             .then((post) => {
                 if (!post) {
                     return res.status(404).json();
@@ -109,5 +142,23 @@ export const votePost = async (req, res) => {
             }).catch((error) => {
                 console.log(error);
             })
+    })
+}
+
+export const closePost = async (req, res) => {
+    await Post.findById(req.params.id).then((post) => {
+        if (!post) return res.status(404);
+        post.isAlive = false;
+        post.save();
+        return res.status(200);
+    })
+}
+
+export const reopenPost = async (req, res) => {
+    await Post.findById(req.params.id).then((post) => {
+        if (!post) return res.status(404);
+        post.isAlive = true;
+        post.save();
+        return res.status(200);
     })
 }

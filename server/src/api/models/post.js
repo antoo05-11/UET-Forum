@@ -39,23 +39,7 @@ const postSchema = mongoose.Schema({
         type: Schema.Types.ObjectId
     }],
     answers: [{
-        author: {
-            type: Schema.Types.ObjectId,
-            required: true,
-            ref: 'User'
-        },
-        content: String,
-        point: {
-            type: Number,
-            min: 0,
-            required: true,
-            default: 0
-        },
-        lastUpdated: {
-            type: Date,
-            require: true,
-            default: Date.now()
-        }
+        type: Schema.Types.ObjectId
     }]
 
 });
