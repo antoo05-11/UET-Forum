@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 import CreateAnswer from "./create-answer/CreateAnswer";
+import Answer from "./answer/Answer";
 
 export default function Post() {
     const [author, setAuthor] = useState("");
@@ -13,12 +14,12 @@ export default function Post() {
     useEffect(() => {
         axios.get(`http://localhost:5050/api/post/${params.threadID}`)
         .then((res) => {
-            setAuthor(res.data.post.authorID);
-            // axios.get(`http://localhost:5050/api`)
+            // console.log(res.data);
+            setAuthor(res.data.post.authorName);
             setTitle(res.data.post.title);
             setContent(res.data.post.content);
-            setAnswers(res.data.answers);
-            console.log(answers);
+            setAnswers(res.data.fullAns);
+            // console.log(answers);
         })
     }, [])
     return (
@@ -27,7 +28,7 @@ export default function Post() {
         <h1>Title: {title}</h1>
         <h2>Content: {content}</h2>
         {answers.map((answer) => 
-            <h3>Answer: {answer.content}</h3>
+           <Answer author={answer.authorName} content={answer.content} />
         )}
         <CreateAnswer />
         </>
