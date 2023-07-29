@@ -1,3 +1,11 @@
+import Thread from "../models/thread"
+import Post from "../models/post"
+
+export const getAllThread = async (req, res) => {
+    const threads = await Thread.find();
+    return res.status(200).json(threads);
+};
+
 import Thread from "../models/thread";
 import Post from "../models/post";
 

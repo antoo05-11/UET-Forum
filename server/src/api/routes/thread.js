@@ -5,7 +5,7 @@ import {
 import {
     createThread,
     deleteThread,
-    getThread,
+    getAllThread, getThread,
     reopenThread,
     updateThread
 } from "../controllers/thread";
@@ -18,6 +18,7 @@ import catchAsync from "../exceptions/catch-async";
 
 const threadRoute = new Router;
 
+threadRoute.get("/", catchAsync(getAllThread));
 threadRoute.get("/:id", catchAsync(getThread));
 threadRoute.post("/create", verifyToken, catchAsync(createThread));
 threadRoute.put("/:id/edit", verifyToken, catchAsync(updateThread));
