@@ -3,7 +3,9 @@ import Answer from "../models/answer";
 import Post from "../models/post";
 import Thread from "../models/thread";
 import User from "../models/user";
-import { pushNotification } from "./notification";
+import {
+    pushNotification
+} from "./notification";
 
 
 export const getAllPosts = async (req, res) => {
@@ -23,14 +25,21 @@ export const getAllPosts = async (req, res) => {
 export const getPost = async (req, res) => {
     let post = await Post.findById(req.params.id);
     if (!post) return res.status(404);
+
+    post = JSON.parse(JSON.stringify(post));
+    await User.findById(post.authorID).then((user) => {
+        if (!user) return;
+        post.authorName = user.username;
+    })
     let answers = await Answer.find({
-        postID: post.id
+        postID: post._id
     });
     let fullAns = [];
-    for (let answer of answers) {
+    for (const answer of answers) {
         await User.findById(answer.author).then((user) => {
             let clone = JSON.parse(JSON.stringify(answer));
-            clone.authorName = user.username;
+            if (!user) clone.authorName = "AI Answer";
+            else clone.authorName = user.username;;
             fullAns.push(clone);
         });
     }
@@ -81,33 +90,33 @@ export const updatePost = async (req, res) => {
 export const answerPost = async (req, res) => {
     const postID = req.params.id;
     const post = await Post.findById(postID);
-    
+
     let newAnswer = {
         author: req.user.id,
         postID: postID,
         rootID: req.body.rootID,
         content: req.body.content
     }
-    
+
     const createdAnswer = await Answer.create(newAnswer);
     if (!createdAnswer) throw new HttpException(404, "Error create answer");
 
     post.answers.push(createdAnswer.id);
     const updatedPost = await post.save();
     if (!updatedPost) throw new HttpException(404, "Error update post")
-    
-    pushNotification([ post.author ], {
+
+    pushNotification([post.author], {
         "post": post.title,
-        "action": "answer" 
+        "action": "answer"
     });
 
     return res.status(200).json(newAnswer);
 }
 
 export const AIanswerPost = async (req, res) => {
-    let rootID = req.body.id;
+    let postID = req.params.id;
     const post = await Post.findOne({
-        _id: rootID
+        _id: postID
     });
 
     const bard = require("fix-esm").require("bard-ai");
@@ -119,7 +128,7 @@ export const AIanswerPost = async (req, res) => {
     await Answer.create(newAnswer).then((answer) => {
         if (!answer) res.status(404);
         Post.findOneAndUpdate({
-            _id: rootID
+            _id: postID
         }, {
             $push: {
                 answers: answer.id

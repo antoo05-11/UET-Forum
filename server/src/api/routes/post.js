@@ -23,7 +23,7 @@ const postRoute = new Router;
 postRoute.get("/", getAllPosts);
 postRoute.get("/:id", getPost);
 postRoute.post("/create", verifyToken, catchAsync(createPost));
-postRoute.post("/AIanswer", verifyToken, catchAsync(AIanswerPost));
+postRoute.post("/:id/AIanswer", verifyToken, catchAsync(AIanswerPost));
 postRoute.put("/:id/edit", verifyToken, catchAsync(updatePost));
 postRoute.put("/:id/vote", verifyToken, catchAsync(votePost));
 postRoute.put(":id/close", verifyToken, catchAsync(closePost));
