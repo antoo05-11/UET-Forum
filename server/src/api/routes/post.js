@@ -16,7 +16,7 @@ import {
 import catchAsync from "../exceptions/catch-async";
 import {
     verifyToken
-} from "../middlewares/verify-token";
+} from "../middlewares/verify";
 
 const postRoute = new Router;
 

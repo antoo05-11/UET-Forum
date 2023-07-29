@@ -12,7 +12,7 @@ import {
 
 import {
     verifyToken
-} from "../middlewares/verify-token";
+} from "../middlewares/verify";
 
 import catchAsync from "../exceptions/catch-async";
 
