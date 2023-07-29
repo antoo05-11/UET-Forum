@@ -26,7 +26,7 @@ const genRefreshToken = (user, expiresIn = "365d") => {
 };
 
 const refreshTokens = [];
-export const sockets = new Map();
+
 export const login = async (req, res, next) => {
     const {
         username,
@@ -52,7 +52,6 @@ export const login = async (req, res, next) => {
         path: "/",
     });
     res.status(200).json({
-        user,
         accessToken
     });
 };

@@ -22,6 +22,7 @@ export const verifyToken = async (req, res, next) => {
         if (!user) {
             throw new HttpException(401, "Authentication failed!");
         }
+        
         req.user = user;
         next();
     } catch (e) {
