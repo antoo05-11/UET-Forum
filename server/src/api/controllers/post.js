@@ -1,6 +1,7 @@
 import Answer from "../models/answer";
 import Post from "../models/post";
 import Thread from "../models/thread";
+import user from "../models/user";
 import User from "../models/user";
 
 
@@ -24,9 +25,18 @@ export const getPost = async (req, res) => {
     let answers = await Answer.find({
         postID: post.id
     });
+    let fullAns = [];
+    for (let answer of answers) {
+        await User.findById(answer.author).then((user) => {
+            let clone = JSON.parse(JSON.stringify(answer));
+            clone.authorName = user.username;
+            fullAns.push(clone);
+        });
+    }
+
     return res.status(200).json({
         post,
-        answers
+        fullAns
     });
 }
 
@@ -66,19 +76,20 @@ export const updatePost = async (req, res) => {
         console.log(error);
     });
 }
+
 export const answerPost = async (req, res) => {
-    let rootID = req.params.id;
+    let postID = req.params.id;
 
     let newAnswer = {
         author: req.user.id,
-        postID: req.body.postID,
+        postID: postID,
         rootID: req.body.rootID,
         content: req.body.content
     }
     await Answer.create(newAnswer).then((answer) => {
         if (!answer) res.status(404);
         Post.findOneAndUpdate({
-            _id: rootID
+            _id: postID
         }, {
             $push: {
                 answers: answer.id
@@ -91,6 +102,7 @@ export const answerPost = async (req, res) => {
         });
     });
 }
+
 export const AIanswerPost = async (req, res) => {
     let rootID = req.body.id;
     const post = await Post.findOne({
