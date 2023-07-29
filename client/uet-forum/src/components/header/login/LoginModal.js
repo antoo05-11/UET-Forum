@@ -4,7 +4,6 @@ import axios from "axios";
 export default function Login() {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
-  const [errorLogin, setErrorLogin] = useState("");
   function submitLoginForm(e) {
     e.preventDefault();
     const data = {
@@ -20,7 +19,7 @@ export default function Login() {
       })
       .catch((err) => {
         console.log(err);
-        setErrorLogin("Your username or password is inscorrect");
+      
       });
       
   }
@@ -44,7 +43,7 @@ export default function Login() {
             </button>
           </div>
           <div class="modal-body">
-            <form onSubmit={submitLoginForm}>
+            <form>
               <label for="myEmail">UserName</label>
               <input
                 type="text"
