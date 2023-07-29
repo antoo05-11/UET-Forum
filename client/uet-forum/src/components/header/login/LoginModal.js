@@ -6,7 +6,6 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [errorLogin, setErrorLogin] = useState("");
   function submitLoginForm(e) {
-    console.log("hello");
     e.preventDefault();
     const data = {
       username: userName,
@@ -17,11 +16,13 @@ export default function Login() {
       .then((res) => {
         window.localStorage.setItem("token", res.data.accessToken);
         console.log(res.data);
+        window.location.reload();
       })
       .catch((err) => {
         console.log(err);
         setErrorLogin("Your username or password is inscorrect");
       });
+      
   }
   function handleUserName(event) {
     console.log("Username changed:", event.target.value);
