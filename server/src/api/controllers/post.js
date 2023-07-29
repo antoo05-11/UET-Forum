@@ -21,8 +21,12 @@ export const getAllPosts = async (req, res) => {
 export const getPost = async (req, res) => {
     let post = await Post.findById(req.params.id);
     if (!post) return res.status(404);
+    let answers = await Answer.find({
+        postID: post.id
+    });
     return res.status(200).json({
-        post
+        post,
+        answers
     });
 }
 
@@ -67,21 +71,24 @@ export const answerPost = async (req, res) => {
 
     let newAnswer = {
         author: req.user.id,
+        postID: req.body.postID,
         rootID: req.body.rootID,
         content: req.body.content
     }
-    await Answer.create(newAnswer).then((answer));
-    await Post.findOneAndUpdate({
-        _id: rootID
-    }, {
-        $push: {
-            answers: newAnswer
-        }
-    }, {
-        new: true
-    }).then((post) => {
-        if (!post) res.status(404);
-        return res.status(200).json(newAnswer);
+    await Answer.create(newAnswer).then((answer) => {
+        if (!answer) res.status(404);
+        Post.findOneAndUpdate({
+            _id: rootID
+        }, {
+            $push: {
+                answers: answer.id
+            }
+        }, {
+            new: true
+        }).then((post) => {
+            if (!post) res.status(404);
+            return res.status(200).json(newAnswer);
+        });
     });
 }
 export const AIanswerPost = async (req, res) => {
@@ -93,20 +100,23 @@ export const AIanswerPost = async (req, res) => {
     const bard = require("fix-esm").require("bard-ai");
     await bard.init(process.env.BARD_COOKIE);
     let newAnswer = {
-        author: req.user.id,
+        postID: req.params.id,
         content: await bard.askAI(post.content)
     }
-    await Post.findOneAndUpdate({
-        _id: rootID
-    }, {
-        $push: {
-            answers: newAnswer
-        }
-    }, {
-        new: true
-    }).then((post) => {
-        if (!post) res.status(404);
-        return res.status(200).json(newAnswer);
+    await Answer.create(newAnswer).then((answer) => {
+        if (!answer) res.status(404);
+        Post.findOneAndUpdate({
+            _id: rootID
+        }, {
+            $push: {
+                answers: answer.id
+            }
+        }, {
+            new: true
+        }).then((post) => {
+            if (!post) res.status(404);
+            return res.status(200).json(newAnswer);
+        });
     });
 }
 
