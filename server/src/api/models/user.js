@@ -5,6 +5,7 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true,
         unique: true,
+        index: true
     },
     password: {
         type: String,
@@ -18,6 +19,7 @@ const userSchema = mongoose.Schema({
     name: {
         type: String,
         required: true,
+        default: "new-user"
     },
     reputation: {
         type: Number,
