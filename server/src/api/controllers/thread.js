@@ -1,6 +1,11 @@
 import Thread from "../models/thread"
 import Post from "../models/post"
 
+export const getAllThread = async (req, res) => {
+    const threads = await Thread.find();
+    return res.status(200).json(threads);
+};
+
 export const getThread = async (req, res) => {
     let rootID = req.param["id"];
 
@@ -8,9 +13,9 @@ export const getThread = async (req, res) => {
 
     let children;
     if (thread.type === "1") {
-        children = Thread.find({"rootID": rootID});
+        children = await Thread.find({"rootID": rootID});
     } else {
-        children = Post.find({"rootID": rootID});
+        children = await Post.find({"rootID": rootID});
     }
     
     return res.status(200).json({

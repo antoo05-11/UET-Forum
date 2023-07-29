@@ -2,7 +2,7 @@ import {
     Router
 } from "express";
 
-import { getThread } from "../controllers/thread";
+import { getAllThread, getThread } from "../controllers/thread";
 
 import {
     verifyToken
@@ -12,6 +12,7 @@ import catchAsync from "../exceptions/catch-async";
 
 const threadRoute = new Router;
 
+threadRoute.get("/", catchAsync(getAllThread));
 threadRoute.get("/:id", catchAsync(getThread));
 
 export default threadRoute;
