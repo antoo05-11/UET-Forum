@@ -13,11 +13,11 @@ export default function MainThread(props) {
     })
     return (
         <div class="col-md-6 border">
-        <Link to={`mt/${props.id}`}>{props.title}</Link>
+        <h1><Link to={`mt/${props.id}`}>{props.title}</Link></h1>
         <br/>
         {childThreadList.map((childThread) =>
             <>
-                <Link to={`st/${childThread._id}`}>{childThread.title}</Link>
+                <h2><Link to={`st/${childThread._id}`}>{childThread.title}</Link></h2>
                 <br />
             </>
             )}
