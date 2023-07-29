@@ -10,6 +10,6 @@ const router = Router();
 
 router.use("/auth", authRoute);
 router.use("/user", userRoute);
-router.use("/post",postRoute);
+router.use("/post", postRoute);
 
 export default router;

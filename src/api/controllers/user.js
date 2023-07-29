@@ -13,6 +13,7 @@ export const createUser = async (req, res) => {
     const newUser = await User.create({
         username,
         password: hashedPassword,
+        name: "new-account"
     });
     return res.status(200).json({
         newUser

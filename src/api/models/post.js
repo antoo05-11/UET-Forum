@@ -4,20 +4,23 @@ import mongoose, {
 import user from "./user";
 
 const postSchema = mongoose.Schema({
-    // rootID: {
-    //     type: Schema.Types.ObjectId,
-    //     ref: 'Thread'
-    // },
+    rootID: {
+        type: Schema.Types.ObjectId,
+        ref: 'Thread'
+    },
     dateTime: {
         type: Date,
         required: true,
         default: Date.now()
     },
+    lastUpdated: {
+        type: Date,
+        required: true,
+        default: Date.now()
+    },
     authorID: {
-        type: String,
-        //type: Schema.Types.ObjectId,
-        required: true
-        //ref: 'user'
+        type: Schema.Types.ObjectId,
+        ref: 'user'
     },
     title: {
         type: String,

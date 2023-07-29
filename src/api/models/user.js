@@ -17,7 +17,7 @@ const userSchema = mongoose.Schema({
     },
     name: {
         type: String,
-        required: true
+        required: true,
     },
     reputation: {
         type: Number,

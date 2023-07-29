@@ -26,10 +26,10 @@ app.use((err, req, res, next) => {
     } = err;
     res.status(status).json({
         message
-    });  
+    });
 });
 
-const PORT = process.env.PORT || 5050;; 
+const PORT = process.env.PORT || 5050;;
 server.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`);
 })
@@ -41,11 +41,12 @@ app.get("/", (req, res) => {
     });
 });
 
-app.use("/api", router);
+app.use("/api", router); 
 
 app.use('/login', (req, res) => {
     res.sendFile(__dirname + '/public/login.html');
 })
+
 
 
 // Database
