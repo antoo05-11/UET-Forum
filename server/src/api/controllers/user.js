@@ -3,6 +3,14 @@ import bcrypt from "bcryptjs";
 import HttpException from "../exceptions/http-exception";
 
 // CRUD
+export const getUser = async (req, res) => {
+    const user = await User.findById(req.params.id);
+    if (!user) throw new HttpException(404, "User not found");
+
+    return res.status(200).json(user);
+};
+
+
 export const viewUser = async (req, res) => {
     return res.status(200).json(req.user);
 };
