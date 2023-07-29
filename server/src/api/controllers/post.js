@@ -27,7 +27,7 @@ export const getPost = async (req, res) => {
     if (!post) return res.status(404);
 
     post = JSON.parse(JSON.stringify(post));
-    await User.findById(post.authorID).then((user) => {
+    await User.findById(post.author).then((user) => {
         if (!user) return;
         post.authorName = user.username;
     })
@@ -159,7 +159,7 @@ export const votePost = async (req, res) => {
                 if (!post) {
                     return res.status(404).json();
                 }
-                User.findById(post.authorID).then((author) => {
+                User.findById(post.author).then((author) => {
                     if (voteVal) {
                         post.point++;
                         author.reputation++;
