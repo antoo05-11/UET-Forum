@@ -26,10 +26,10 @@ export const getPost = async (req, res) => {
     let post = await Post.findById(req.params.id);
     if (!post) return res.status(404);
 
-    let clonePos = JSON.parse(JSON.stringify(post));
-    await User.findById(clonePos.authorID).then((user) => {
+    post = JSON.parse(JSON.stringify(post));
+    await User.findById(post.authorID).then((user) => {
         if (!user) return;
-        clonePos.authorName = user.username;
+        post.authorName = user.username;
     })
     let answers = await Answer.find({
         postID: post.id
@@ -45,7 +45,7 @@ export const getPost = async (req, res) => {
     }
 
     return res.status(200).json({
-        clonePos,
+        post,
         fullAns
     });
 }
