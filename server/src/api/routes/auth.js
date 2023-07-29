@@ -14,6 +14,6 @@ const authRoute = Router();
 
 authRoute.post("/login", catchAsync(login));
 authRoute.post("/refresh-token", catchAsync(requestRefreshToken));
-authRoute.post("/logout",catchAsync(logout))
+authRoute.get("/logout",catchAsync(logout))
 
 export default authRoute;
