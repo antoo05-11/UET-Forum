@@ -8,7 +8,15 @@ const threadSchema = mongoose.Schema({
         type: Schema.Types.ObjectId,
         ref: 'Thread'
     },
+    type: {
+        type: Number,
+        enum: [1, 2]
+    },
     title: {
+        type: String,
+        required: true
+    },
+    author: {
         type: String,
         required: true
     },
@@ -21,7 +29,10 @@ const threadSchema = mongoose.Schema({
         type: Date,
         required: true,
         default: Date.now()
-    }
+    },
+    childrens: [{
+        type: Schema.Types.ObjectId
+    }]
 });
 
 export default mongoose.model("Thread", threadSchema);
