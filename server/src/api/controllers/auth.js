@@ -57,42 +57,35 @@ export const login = async (req, res, next) => {
     });
 };
 
-export const loginWithToken = async (req, res) => {
-    console.log(req.user);
-    if (req.user) res.status(200).json(req.user);
-    else res.status(401);
-}
+export const requestRefreshToken = async (req, res) => {
+    const {
+        refreshToken
+    } = req.cookies;
+    
+    if (!refreshToken) throw new HttpException(400, "No refresh token");
+    
+    if (!refreshTokens.includes(refreshToken)) throw new HttpException(403, "Refresh token is invalid");
+
+    try {
+        const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_KEY);
+        
+        const user = await User.findOne(decoded.id);
+        
+        if (!user) throw new HttpException(404, "User not found");
+        
+        const accessToken = genToken(user);
+        
+        res.status(200).json({
+            accessToken
+        });
+    } catch (error) {
+        throw new HttpException(401, "Invalid refresh token");
+    }
+};
 
 export const logout = async (req, res) => {
     res.clearCookie('token');
     res.status(200).json({
         message: 'Log out successfully'
     });
-}
-
-export const requestRefreshToken = async (req, res) => {
-    const {
-        refreshToken
-    } = req.cookies;
-
-    if (!refreshToken) throw new HttpException(400, "No refresh token");
-
-    if (!refreshTokens.includes(refreshToken)) throw new HttpException(403, "Refresh token is invalid");
-
-    try {
-        const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_KEY);
-
-        const user = await User.findOne(decoded.id);
-
-        if (!user) throw new HttpException(404, "User not found");
-
-        const accessToken = genToken(user);
-
-        res.status(200).json({
-            user,
-            accessToken
-        });
-    } catch (error) {
-        throw new HttpException(401, "Invalid refresh token");
-    }
 };
