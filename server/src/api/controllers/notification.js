@@ -1,3 +1,4 @@
+import HttpException from "../exceptions/http-exception";
 import Notification from "../models/notification";
 
 export const pushNotification = async function(users, content) {
@@ -12,5 +13,8 @@ export const pushNotification = async function(users, content) {
 
 export const showNotification = async (req, res) => {
     const user = req.user;
-    
+    const notifications = await Notification.find({ "user": user });
+    if (!notifications) throw new HttpException(404, "Notifications not found")
+
+    return res.status(200).json(notifications);
 };
