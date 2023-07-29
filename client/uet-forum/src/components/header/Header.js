@@ -57,10 +57,10 @@ export default function Header() {
 
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-1">
-                    <h1>LOGO</h1>
+                <div class="col-md-2">
+                    <h1>UET FORUM</h1>
                 </div>
-                <div class="col-md-8">
+                <div class="col-md-7">
                 </div>
                 <div class="col-md-3">
                     <CheckAthorization name={loginInfo.username} />
