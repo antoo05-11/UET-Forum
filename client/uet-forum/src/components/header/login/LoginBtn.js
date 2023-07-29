@@ -1,12 +1,10 @@
 export default function LoginBtn() {
     return (
-        <button
-            type="button"
-            class="btn btn-primary btn-block"
+        <p
             data-toggle="modal"
             data-target="#loginModal"
         >
             Login
-        </button>
+        </p>
     )
 }

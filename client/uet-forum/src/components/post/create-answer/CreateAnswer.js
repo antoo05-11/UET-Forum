@@ -4,12 +4,13 @@ export default function CreateAnswer() {
         
     }
     return(
-        <form>
+        
+            <form>
             <div class="form-group">
-               <label for="answer">Answer</label>
                <input type="text" id = "answer" class="form-control" placeholder="Answer" />
                <button class="btn btn-primary" onClick={handleClick}>Post</button>
             </div>
          </form>
+        
     )
 }

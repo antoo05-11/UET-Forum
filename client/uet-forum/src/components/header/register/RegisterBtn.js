@@ -1,12 +1,10 @@
 export default function RegisterBtn() {
     return (
-        <button
-            type="button"
-            class="btn btn-primary btn-block"
+        <p
             data-toggle="modal"
             data-target="#registerModal"
         >
             Register
-        </button>
+        </p>
     )
 }

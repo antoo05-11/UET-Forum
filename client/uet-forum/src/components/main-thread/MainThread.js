@@ -16,17 +16,38 @@ export default function MainThread() {
                 setTitle(res.data.thread.title)
             })
     }, [])
-    
+
     return (
-        <>
-            <h1>{title}</h1>
-            <br/>
-        {childThreadList.map((childThread) =>
-            <>
-                <h2><Link to={`/st/${childThread._id}`}>{childThread.title}</Link></h2>
-                <br />
-            </>
-            )}
-        </>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-2"></div>
+                <div class="col-8">
+                    <h3>{title}</h3>
+                    <br />
+                    <ul style={{"list-style-type": "none"}}>
+                        {childThreadList.map((childThread) =>
+                            <li>
+                                <div class="container-fluid border" style={{"height" : "80px"}}>
+                                    <div class="row h-100">
+                                        <div class="col-md-7 border">
+                                            <Link to={`/st/${childThread._id}`}>{childThread.title}</Link>
+                                        </div>
+                                        <div class="col-md-2 border">
+                                            <p>info</p>
+                                        </div>
+                                        <div class="col-md-3 border">
+                                            <p>last activity</p>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </li>
+                        )}
+                    </ul>
+
+                </div>
+                <div class="col-2"></div>
+            </div>
+        </div>
     )
 }

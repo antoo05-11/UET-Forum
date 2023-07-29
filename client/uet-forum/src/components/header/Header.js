@@ -8,12 +8,18 @@ import LogoutBtn from "./logout/LogoutBtn";
 import NavBar from "./nav-bar/NavBar";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
+
+import { useSelector, useDispatch } from "react-redux";
+import { setLoginInfo } from "../../features/loginInfo/loginInfoSlice";
+
 export function CheckAthorization(props) {
+    
     const params = useParams();
     if (props.name == '') {
         return (
-            <div class="col-sm-2 d-flex justify-content-around">
+            <div class="container-fluid d-flex justify-content-end">
                 <LoginBtn />
+                <p>/</p>
                 <RegisterBtn />
                 <LoginModal />
                 <RegisterModal />
@@ -22,25 +28,26 @@ export function CheckAthorization(props) {
     }
     else {
         return (
-            <div class="col-sm-2 d-flex justify-content-around">
+            <div class="container-fluid d-flex justify-content-end">
                 
-                <p>Hello,<Link to = {`/user`}> {props.name}</Link></p>
+                <Link to = {`/user`}> {props.name}</Link>
+                <p>/</p>
                 <LogoutBtn />
             </div>
         )
     }
 }
 export default function Header() {
-
-    const [username, setUsername] = useState("");
+    const dispatch = useDispatch();
+    const loginInfo = useSelector((state) => state.loginInfo);
     useEffect(() => {
         axios.get(`http://localhost:5050/api/user/view`, {
             headers: {
                 Authorization: `Bearer ${window.localStorage.getItem("token")}`
             }
         }).then((res) => {
-            console.log("name: " + res.data.name)
-            setUsername(res.data.name)
+            console.log("name: " + res.data.name);
+            dispatch(setLoginInfo({"username": res.data.name, "logged": true}));
         }).catch((err) => {
             console.log(err)
             window.localStorage.removeItem("token");
@@ -50,9 +57,17 @@ export default function Header() {
 
         <div class="container-fluid">
             <div class="row">
+                <div class="col-md-1">
+                    <h1>LOGO</h1>
+                </div>
+                <div class="col-md-8">
+                </div>
+                <div class="col-md-3">
+                    <CheckAthorization name={loginInfo.username} />
+                </div>
+            </div>
+            <div class="row bg-secondary .d-flex justify-content-end">
                 <NavBar />
-                <CheckAthorization name={username} />
-                
             </div>
         </div>
 

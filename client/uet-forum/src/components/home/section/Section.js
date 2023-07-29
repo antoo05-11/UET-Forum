@@ -12,16 +12,21 @@ export default function Content() {
         })
     }, [])
     return (
-        <div class="container-fluid">
-                <div class="row">
-                    {
-                        mainThreadList.map((mainThread) => (
-                            <MainThread title={mainThread.title} id={mainThread._id} />
-                        ))
-                    }
+        <div class="container-fluid ">
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-10">
+                    <div class="row">
+                        {
+                            mainThreadList.map((mainThread) => (
+                                <MainThread title={mainThread.title} id={mainThread._id} />
+                            ))
+                        }
+                    </div>
                 </div>
-                    
+                <div class="col-md-1"></div>
 
+            </div>
         </div>
     )
 }

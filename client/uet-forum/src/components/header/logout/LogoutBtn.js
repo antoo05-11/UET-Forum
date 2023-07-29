@@ -6,11 +6,9 @@ export default function LogoutBtn() {
 
 
     return (
-        <button onClick={handleOnclick}
-            type="button"
-            class="btn btn-primary btn-block mr-2"
+        <p onClick={handleOnclick}
         >
             Logout
-        </button>
+        </p>
     )
 }

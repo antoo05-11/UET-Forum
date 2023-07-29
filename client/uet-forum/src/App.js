@@ -24,9 +24,8 @@ export default function App() {
         <Route path='/mt/:threadID' element={<MainThread />} />
         <Route path='/st/:threadID' element={<SubThread />} />
         <Route path='/p/:threadID' element={<Post />} />
-        <Route path ='/user' element = {<UserProfile/>} />
-        <Route path ='/user/:userID' element = {<ViewUserProfile/>} />
-
+        <Route path='/user' element={<UserProfile />} />
+        <Route path='/user/:userID' element={<ViewUserProfile />} />
       </Routes>
     </Router>
   );
