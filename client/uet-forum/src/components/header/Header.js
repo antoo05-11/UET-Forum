@@ -5,6 +5,7 @@ import RegisterBtn from "./register/RegisterBtn";
 import LoginModal from "./login/LoginModal";
 import RegisterModal from "./register/RegisterModal";
 import LogoutBtn from "./logout/LogoutBtn";
+import NavBar from "./nav-bar/NavBar";
 export function CheckAthorization(props) {
     if (props.name == '') {
         return (
@@ -45,7 +46,7 @@ export default function Header() {
 
         <div class="container-fluid">
             <div class="row">
-                <div class="col-sm-10"></div>
+                <NavBar />
 
 
                 <CheckAthorization name={username} />
