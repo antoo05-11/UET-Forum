@@ -35,12 +35,14 @@ const postSchema = mongoose.Schema({
         required: true,
         default: 0
     },
-    tags: [{
-        type: Schema.Types.ObjectId
-    }],
     answers: [{
         type: Schema.Types.ObjectId
-    }]
+    }],
+    isAlive: {
+        type: Boolean,
+        default: true,
+        required: true
+    }
 
 });
 
