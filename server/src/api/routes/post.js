@@ -3,8 +3,13 @@ import {
 } from "express";
 import {
     AIanswerPost,
+    answerPost,
+    closePost,
     createPost,
+    deletePost,
+    getAllPosts,
     getPost,
+    reopenPost,
     updatePost,
     votePost,
 } from "../controllers/post";
@@ -15,11 +20,14 @@ import {
 
 const postRoute = new Router;
 
-postRoute.post("/getPost", getPost);
-postRoute.post("/createPost", verifyToken, catchAsync(createPost));
-postRoute.post("/AIanswerPost", verifyToken, catchAsync(AIanswerPost));
-postRoute.post("/updatePost", verifyToken, catchAsync(updatePost));
-postRoute.post("/votePost", verifyToken, catchAsync(votePost));
-
+postRoute.get("/", getAllPosts);
+postRoute.get("/:id", getPost);
+postRoute.post("/create", verifyToken, catchAsync(createPost));
+postRoute.post("/AIanswer", verifyToken, catchAsync(AIanswerPost));
+postRoute.put("/:id/edit", verifyToken, catchAsync(updatePost));
+postRoute.put("/:id/vote", verifyToken, catchAsync(votePost));
+postRoute.put(":id/close", verifyToken, catchAsync(closePost));
+postRoute.put("/:id/reopen", verifyToken, catchAsync(reopenPost));
+postRoute.post("/:id/answer", verifyToken, catchAsync(answerPost));
 
 export default postRoute;

@@ -2,28 +2,18 @@ import mongoose, {
     Schema
 } from "mongoose";
 
-const postSchema = mongoose.Schema({
+const answerSchema = mongoose.Schema({
     rootID: {
-        type: Schema.Types.ObjectId,
-        ref: 'Thread'
-    },
-    dateTime: {
-        type: Date,
-        required: true,
-        default: Date.now()
+        type: Schema.Types.ObjectId
     },
     lastUpdated: {
         type: Date,
         required: true,
         default: Date.now()
     },
-    authorID: {
+    author: {
         type: Schema.Types.ObjectId,
         ref: 'user'
-    },
-    title: {
-        type: String,
-        required: true
     },
     content: {
         type: String,
@@ -34,11 +24,7 @@ const postSchema = mongoose.Schema({
         min: 0,
         required: true,
         default: 0
-    },
-    answers: [{
-        type: Schema.Types.ObjectId
-    }]
-
+    }
 });
 
-export default mongoose.model("Post", postSchema);
+export default mongoose.model("Answer", answerSchema);

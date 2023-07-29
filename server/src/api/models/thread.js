@@ -30,7 +30,7 @@ const threadSchema = mongoose.Schema({
         required: true,
         default: Date.now()
     },
-    childrens: [{
+    children: [{
         type: Schema.Types.ObjectId
     }],
     isAlive: {
