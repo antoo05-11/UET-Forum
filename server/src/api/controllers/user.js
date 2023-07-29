@@ -1,6 +1,6 @@
-import user from "../models/user";
 import User from "../models/user";
 import bcrypt from "bcryptjs";
+import HttpException from "../exceptions/http-exception";
 
 // CRUD
 export const viewUser = async (req, res) => {
@@ -13,12 +13,16 @@ export const createUser = async (req, res) => {
         password
     } = req.body;
 
+    const existingUser = await User.findOne({ username });
+    if (existingUser) throw new HttpException(400, "Username is duplicated");
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = await User.create({
         username,
         password: hashedPassword
     });
+
     return res.status(200).json({
         newUser
     });
