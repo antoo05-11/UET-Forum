@@ -2,6 +2,7 @@ import HttpException from "../exceptions/http-exception";
 import Answer from "../models/answer";
 import Post from "../models/post";
 import Thread from "../models/thread";
+import user from "../models/user";
 import User from "../models/user";
 import { pushNotification } from "./notification";
 
@@ -26,9 +27,18 @@ export const getPost = async (req, res) => {
     let answers = await Answer.find({
         postID: post.id
     });
+    let fullAns = [];
+    for (let answer of answers) {
+        await User.findById(answer.author).then((user) => {
+            let clone = JSON.parse(JSON.stringify(answer));
+            clone.authorName = user.username;
+            fullAns.push(clone);
+        });
+    }
+
     return res.status(200).json({
         post,
-        answers
+        fullAns
     });
 }
 
