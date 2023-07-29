@@ -9,7 +9,7 @@ export const createThread = async (req, res) => {
         rootID: req.body.rootID,
         type: 2,
         title: req.body.title
-    }
+    } 
     Thread.create(newThread);
     return res.status(200).json(newThread);
 }
