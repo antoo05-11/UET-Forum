@@ -32,7 +32,7 @@ export const getPost = async (req, res) => {
         post.authorName = user.username;
     })
     let answers = await Answer.find({
-        postID: post.id
+        postID: post._id
     });
     let fullAns = [];
     for (const answer of answers) {
