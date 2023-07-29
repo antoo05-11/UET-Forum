@@ -12,6 +12,11 @@ const notificationSchema = mongoose.Schema({
     content: {
         type: Schema.Types.Mixed,
         required: true
+    },
+    seen: {
+        type: Boolean,
+        required: true,
+        default: false
     }
 });
 
