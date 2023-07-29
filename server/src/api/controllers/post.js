@@ -83,7 +83,7 @@ export const createPost = async (req, res) => {
         }, {
             new: true
         }).then((thread) => {
-            if (!thread) return res.status(404);
+            if (!thread) throw new HttpException(404, "Thread not found");
             return res.status(200).json(newPost);
         });
     });
@@ -176,7 +176,7 @@ export const votePost = async (req, res) => {
                 if (!post) {
                     return res.status(404).json();
                 }
-                User.findById(post.authorID).then((author) => {
+                User.findById(post.author).then((author) => {
                     if (voteVal) {
                         post.point++;
                         author.reputation++;

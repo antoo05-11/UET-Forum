@@ -5,7 +5,8 @@ import {
 import {
     createThread,
     deleteThread,
-    getAllThread, getThread,
+    getAllThread,
+    getThread,
     reopenThread,
     updateThread
 } from "../controllers/thread";
