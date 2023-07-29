@@ -19,7 +19,7 @@ const answerSchema = mongoose.Schema({
     },
     author: {
         type: Schema.Types.ObjectId,
-        ref: 'user'
+        ref: 'User'
     },
     content: {
         type: String,
