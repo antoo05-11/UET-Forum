@@ -15,7 +15,7 @@ export default function MainThread() {
                 setChildThreadList(res.data.children);
                 setTitle(res.data.thread.title)
             })
-    })
+    }, [])
     
     return (
         <>
