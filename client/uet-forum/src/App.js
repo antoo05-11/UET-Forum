@@ -1,10 +1,10 @@
 import logo from './logo.svg';
 import './App.css';
-import Home from "./components/home/Home"
+import Home from './Components/home/Home'
 
 function App() {
   return (
-    <Home />
+    <Home/>
     
   );
 }
