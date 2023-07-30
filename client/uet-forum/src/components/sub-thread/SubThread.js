@@ -118,7 +118,7 @@ export default function SubThread() {
                                             <p>Reply: {post.answers.length}</p>
                                         </div>
                                         <div class="col-md-2 border" style={{"display": "flex", "flex-direction": "row", "alignItems": "center", "justifyContent": "center"}}>
-                                            <p>Last activity: {post.lastUpdated}</p>
+                                            <p>Last activity: {post.lastUpdated.split('T')[0]}</p>
                                         </div>
                                     </div>
                                 </div>
