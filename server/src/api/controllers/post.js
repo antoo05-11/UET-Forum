@@ -1,7 +1,6 @@
 import HttpException from "../exceptions/http-exception";
 import Answer from "../models/answer";
 import Post from "../models/post";
-import thread from "../models/thread";
 import Thread from "../models/thread";
 import User from "../models/user";
 import {

@@ -78,8 +78,8 @@ try {
         password: process.env.FTP_PASSWORD,
         sercure: true
     }).then(() => {
-        console.log("FTP-Connected");
-        client.uploadFrom("D:/UET-Forum/UET-Forum/server/README.md", "/public_html/imageResource/README.md");
+        // console.log("FTP-Connected");
+        // client.uploadFrom("D:/UET-Forum/UET-Forum/server/README.md", "/public_html/imageResource/README.md");
     })
 } catch (err) {
     console.log(err);
