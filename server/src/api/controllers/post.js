@@ -105,20 +105,19 @@ export const createPost = async (req, res) => {
             return res.status(200).json(newPost);
         });
     });
-}
+};
 
 export const updatePost = async (req, res) => {
-    await Post.findById(req.params.postID).then((post) => {
-        if (!post) return res.status(200);
-        post.content = req.body.content;
-        post.lastUpdated = Date.now();
-        post.title = req.body.title;
-        post.save();
-        return res.status(200).json(post);
-    }).catch((error) => {
-        console.log(error);
-    });
-}
+    let post = await Post.findById(req.params.postID);
+    if (!post) throw new HttpException(404, "Post not found");
+    if (!req.user.role.includes("admin") && post.author.toString() != req.user.id) throw new HttpException (400, "You do not have permission for this action");
+
+    post.content = req.body.content;
+    post.lastUpdated = Date.now();
+    post.title = req.body.title;
+    post.save();
+    return res.status(200).json(post);
+};
 
 export const answerPost = async (req, res) => {
     const postID = req.params.postID;
@@ -150,9 +149,9 @@ export const answerPost = async (req, res) => {
 
 export const AIanswerPost = async (req, res) => {
     let postID = req.params.postID;
-    const post = await Post.findOne({
-        _id: postID
-    });
+    const post = await Post.findOne({ _id: postID });
+    if (!post) throw new HttpException(404, "Post not found");
+    if (!req.user.role.includes("admin") && post.author.toString() != req.user.id) throw new HttpException (400, "You do not have permission for this action");
 
     const bard = require("fix-esm").require("bard-ai");
     await bard.init(process.env.BARD_COOKIE);
@@ -213,19 +212,21 @@ export const votePost = async (req, res) => {
 }
 
 export const closePost = async (req, res) => {
-    await Post.findById(req.params.postID).then((post) => {
-        if (!post) return res.status(404);
-        post.isAlive = false;
-        post.save();
-        return res.status(200);
-    })
+    let post = await Post.findOne({ _id: postID });
+    if (!post) throw new HttpException(404, "Post not found");
+    if (!req.user.role.includes("admin") && post.author.toString() != req.user.id) throw new HttpException (400, "You do not have permission for this action");
+    
+    post.isAlive = false;
+    post.save();
+    return res.status(200).json();
 }
 
 export const reopenPost = async (req, res) => {
-    await Post.findById(req.params.postID).then((post) => {
-        if (!post) return res.status(404);
-        post.isAlive = true;
-        post.save();
-        return res.status(200);
-    })
+    let post = await Post.findOne({ _id: postID });
+    if (!post) throw new HttpException(404, "Post not found");
+    if (!req.user.role.includes("admin") && post.author.toString() != req.user.id) throw new HttpException (400, "You do not have permission for this action");
+
+    post.isAlive = true;
+    post.save();
+    return res.status(200).json();
 }

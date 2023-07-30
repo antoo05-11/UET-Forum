@@ -16,8 +16,8 @@ import catchAsync from "../exceptions/catch-async";
 
 const answerRoute = new Router;
 
-answerRoute.get("/:id", getAnswer);
-answerRoute.put("/:id/edit", verifyToken, catchAsync(updateAnswer));
-answerRoute.delete("/:id/", verifyToken, catchAsync(deleteAnswer));
+answerRoute.get("/:answerID", getAnswer);
+answerRoute.put("/:answerID/edit", verifyToken, catchAsync(updateAnswer));
+answerRoute.delete("/:answerID/delete", verifyToken, catchAsync(deleteAnswer));
 
 export default answerRoute;
