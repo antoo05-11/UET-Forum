@@ -7,6 +7,8 @@ import Answer from "./answer/Answer";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { UseSelector } from "react-redux";
 
 import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi"
 
@@ -127,6 +129,8 @@ export default function Post() {
     const [answers, setAnswers] = useState([]);
     const [authorId, setAuthorId] = useState("");
     const [time, setTime] = useState("");
+    const dispatch = useDispatch();
+    const isLoggedIn = useSelector(state => state.loginInfo.logged);
     const [root1, setRoot1] = useState("");
     const [root2, setRoot2] = useState("");
     const [root1ID, setRoot1ID] = useState("");
@@ -156,32 +160,33 @@ export default function Post() {
             <div class="row">
                 <div class="col-md-2"></div>
                 <div class="col-md-8">
-                <ul class="breadcrumb bg-white">
+                    <ul class="breadcrumb bg-white">
                         <li class="breadcrumb-item"><a href="/">Forum</a></li>
                         <li class="breadcrumb-item"><a href={`/mt/${root1ID}`}>{root1}</a></li>
                         <li class="breadcrumb-item"><a href={`/st/${root2ID}`}>{root2}</a></li>
                     </ul>
                     <div class="container-fulid">
                         <div class="row mt-4">
-                            <div class="col-md-2 bg-secondary" style={{"display": "flex", "flex-direction": "column", "alignItems": "center", "justifyContent": "center"}}>
-                            <img src={`https://uet-forum.000webhostapp.com/imageResource/avatar/${authorId}.jpg`} style={{"width": "70px", "height": "70px", "border" : "1px solid black", "border-radius": "50%"}} />
+                            <div class="col-md-2 bg-secondary" style={{ "display": "flex", "flex-direction": "column", "alignItems": "center", "justifyContent": "center" }}>
+                                <img src={`https://uet-forum.000webhostapp.com/imageResource/avatar/${authorId}.jpg`} style={{ "width": "70px", "height": "70px", "border": "1px solid black", "border-radius": "50%" }} />
                                 <p><Link className="text-white" to={`/user/${authorId}`} >{author}</Link></p>
                             </div>
                             <div class="col-md-9 border">
+
                                 <p>{time.split('T')[0]}</p>
                                 <h1>{title}</h1>
                                 <p>{content}</p>
-                                
+
                             </div>
                             <div class="col-md-1">
-                            <Check authorId={authorId} title={title} content={content} postId={params.threadID} />
+                                <Check authorId={authorId} title={title} content={content} postId={params.threadID} />
                             </div>
                         </div>
                     </div>
                     {answers.map((answer) =>
                         <Answer author={answer.authorName} content={answer.content} id={answer.author} time={answer.lastUpdated.split('T')[0]} />
                     )}
-                    <CreateAnswer id={id} />
+                    {isLoggedIn ? <CreateAnswer id={id} /> : null}
                 </div>
                 <div class="col-md-2"></div>
             </div>

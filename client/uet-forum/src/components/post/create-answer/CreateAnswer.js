@@ -30,9 +30,9 @@ export default function CreateAnswer(props) {
     }
     return(
             <form>
-            <div class="form-group">
-               <input type="text" id = "answer" class="form-control" placeholder="Answer" value = {content} onChange ={handleAnswer} />
-               <button class="btn btn-primary" onClick={handleClick}>Post</button>
+            <div class="form-group mt-4">
+               <input type="text" id = "answer" class="form-control" placeholder="Answer" value = {content} onChange ={handleAnswer} style={{"width": "800px"}}/>
+               <button class="btn btn-primary mt-2" onClick={handleClick}>Post</button>
             </div>
          </form>
         
