@@ -4,6 +4,7 @@ import {
 import {
     AIanswerPost,
     answerPost,
+    broadcastPost,
     closePost,
     createPost,
     deletePost,
@@ -23,6 +24,7 @@ const postRoute = new Router;
 // postRoute.get("/:threadID/:page?", getAllPosts);
 postRoute.get("/:postID", getPost);
 postRoute.post("/create", verifyToken, catchAsync(createPost));
+postRoute.post("/broadcast", verifyToken, catchAsync(broadcastPost));
 postRoute.post("/:postID/AIanswer", verifyToken, catchAsync(AIanswerPost));
 postRoute.put("/:postID/edit", verifyToken, catchAsync(updatePost));
 postRoute.put("/:postID/vote", verifyToken, catchAsync(votePost));

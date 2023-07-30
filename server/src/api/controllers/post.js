@@ -82,28 +82,33 @@ export const getPost = async (req, res) => {
     });
 }
 
+export const broadcastPost = async (req, res) => {
+    // const newPost =  await createPost(req, res);
+    // console.log(newPost);
 
-export const createPost = async (req, res) => {
     let newPost = {
-        rootID: req.body.threadID,
+        rootID: req.body.rootID,
         author: req.user.id,
         title: req.body.title,
         content: req.body.content
     }
-    await Post.create(newPost).then((post) => {
-        Thread.findOneAndUpdate({
-            _id: newPost.rootID
-        }, {
-            $push: {
-                children: post.id
-            }
-        }, {
-            new: true
-        }).then((thread) => {
-            if (!thread) throw new HttpException(404, "Thread not found");
-            return res.status(200).json(newPost);
-        });
-    });
+
+
+}
+
+
+export const createPost = async (req, res) => {
+    let newPost = {
+        rootID: req.body.rootID,
+        author: req.user.id,
+        title: req.body.title,
+        content: req.body.content
+    }
+    const createdPost= await Post.create(newPost);
+    const isSuccess = await Thread.findOneAndUpdate({ _id: createdPost.rootID }, { $push: { children: createdPost.id } }, { new: true });
+
+    if (!isSuccess) throw new HttpException(404, "Error adding post to thead");
+    return res.status(200).json(createdPost);
 };
 
 export const updatePost = async (req, res) => {
@@ -121,6 +126,7 @@ export const updatePost = async (req, res) => {
 export const answerPost = async (req, res) => {
     const postID = req.params.postID;
     const post = await Post.findById(postID);
+    if (!post) throw new HttpException(404, "Post not found");
 
     let newAnswer = {
         author: req.user.id,
@@ -229,3 +235,4 @@ export const reopenPost = async (req, res) => {
     post.save();
     return res.status(200).json();
 }
+
