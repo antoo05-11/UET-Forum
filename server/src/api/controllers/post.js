@@ -3,7 +3,9 @@ import Answer from "../models/answer";
 import Post from "../models/post";
 import Thread from "../models/thread";
 import User from "../models/user";
-import { pushNotification } from "./notification";
+import {
+    pushNotification
+} from "./notification";
 
 const PAGE_LIMIT = 10;
 
@@ -11,7 +13,7 @@ const PAGE_LIMIT = 10;
 //     const threadID = req.params.threadID;
 //     const page = req.query.page;
 //     const sort = req.query.sort;
-    
+
 //     const thread = await Thread.findById(threadID);
 //     if (!thread || !thread.isAlive) throw new HttpException(404, "Thread not found");
 
@@ -38,6 +40,17 @@ export const getPost = async (req, res) => {
 
     post = JSON.parse(JSON.stringify(post));
 
+    let roots = [];
+    if (post.rootID) { 
+        await Thread.findById(post.rootID).then((thread) => {
+            roots.push(thread);
+            if (thread.rootID != null)
+                Thread.findById(thread.rootID).then(thread => {
+                    roots.push(thread);
+                });
+        });
+    }
+
     await User.findById(post.author).then((user) => {
         if (!user) throw new HttpException(404, "User not found");
         post.authorName = user.username;
@@ -62,7 +75,11 @@ export const getPost = async (req, res) => {
         });
     }
 
-    return res.status(200).json({ post, fullAns });
+    return res.status(200).json({
+        post,
+        fullAns,
+        roots
+    });
 }
 
 export const broadcastPost = async (req, res) => {
