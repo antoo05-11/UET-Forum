@@ -58,7 +58,7 @@ export default function Header() {
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-2">
-                    <h1>UET FORUM</h1>
+                    <h1 className="text-primary">UET FORUM</h1>
                 </div>
                 <div class="col-md-7">
                 </div>
