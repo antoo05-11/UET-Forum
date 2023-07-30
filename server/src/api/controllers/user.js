@@ -24,7 +24,7 @@ export const getUser = async (req, res) => {
         dateTime: foundPost.dateTime,
     }));
 
-    const answers = await Promise.all(
+    let answers = await Promise.all(
         answerList.map(async foundAnswer => {
             const foundPost = await Post.findById(foundAnswer.postID);
             if (foundPost)
@@ -36,12 +36,15 @@ export const getUser = async (req, res) => {
                     dateTime: foundAnswer.lastUpdated,
                 };
         })
-    );
 
+    );
+    var filtered = answers.filter(function (answers) {
+        return answers != null;
+    });
     return res.status(200).json({
         user,
         posts,
-        answers
+        filtered
     });
 };
 
