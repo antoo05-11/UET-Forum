@@ -41,7 +41,7 @@ export const getPost = async (req, res) => {
     post = JSON.parse(JSON.stringify(post));
 
     let roots = [];
-    if (post.rootID) { 
+    if (post.rootID) {
         await Thread.findById(post.rootID).then((thread) => {
             roots.push(thread);
             if (thread.rootID != null)
@@ -89,8 +89,16 @@ export const createPost = async (req, res) => {
         title: req.body.title,
         content: req.body.content
     }
-    const createdPost= await Post.create(newPost);
-    const isSuccess = await Thread.findOneAndUpdate({ _id: createdPost.rootID }, { $push: { children: createdPost.id } }, { new: true });
+    const createdPost = await Post.create(newPost);
+    const isSuccess = await Thread.findOneAndUpdate({
+        _id: createdPost.rootID
+    }, {
+        $push: {
+            children: createdPost.id
+        }
+    }, {
+        new: true
+    });
 
     if (!isSuccess) throw new HttpException(404, "Error adding post to thead");
     return res.status(200).json(createdPost);
@@ -99,7 +107,7 @@ export const createPost = async (req, res) => {
 export const updatePost = async (req, res) => {
     let post = await Post.findById(req.params.postID);
     if (!post) throw new HttpException(404, "Post not found");
-    if (!req.user.role.includes("admin") && post.author.toString() != req.user.id) throw new HttpException (400, "You do not have permission for this action");
+    if (!req.user.role.includes("admin") && post.author.toString() != req.user.id) throw new HttpException(400, "You do not have permission for this action");
 
     post.content = req.body.content;
     post.lastUpdated = Date.now();
@@ -139,9 +147,11 @@ export const answerPost = async (req, res) => {
 
 export const AIanswerPost = async (req, res) => {
     let postID = req.params.postID;
-    const post = await Post.findOne({ _id: postID });
+    const post = await Post.findOne({
+        _id: postID
+    });
     if (!post) throw new HttpException(404, "Post not found");
-    if (!req.user.role.includes("admin") && post.author.toString() != req.user.id) throw new HttpException (400, "You do not have permission for this action");
+    if (!req.user.role.includes("admin") && post.author.toString() != req.user.id) throw new HttpException(400, "You do not have permission for this action");
 
     const bard = require("fix-esm").require("bard-ai");
     await bard.init(process.env.BARD_COOKIE);
@@ -202,22 +212,26 @@ export const votePost = async (req, res) => {
 }
 
 export const closePost = async (req, res) => {
-    let post = await Post.findOne({ _id: req.params.id });
+    console.log(1234);
+    let post = await Post.findOne({
+        _id: req.params.postID
+    });
     if (!post) throw new HttpException(404, "Post not found");
-    if (!req.user.role.includes("admin") && post.author.toString() != req.user.id) throw new HttpException (400, "You do not have permission for this action");
-    
+    if (!req.user.role.includes("admin") && post.author.toString() != req.user.id) throw new HttpException(400, "You do not have permission for this action");
+
     post.isAlive = false;
     post.save();
     return res.status(200).json();
 }
 
 export const reopenPost = async (req, res) => {
-    let post = await Post.findOne({ _id: req.params.id });
+    let post = await Post.findOne({
+        _id: req.params.postID
+    });
     if (!post) throw new HttpException(404, "Post not found");
-    if (!req.user.role.includes("admin") && post.author.toString() != req.user.id) throw new HttpException (400, "You do not have permission for this action");
+    if (!req.user.role.includes("admin") && post.author.toString() != req.user.id) throw new HttpException(400, "You do not have permission for this action");
 
     post.isAlive = true;
     post.save();
     return res.status(200).json();
 }
-
