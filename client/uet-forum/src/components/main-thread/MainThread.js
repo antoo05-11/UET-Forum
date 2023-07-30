@@ -42,7 +42,7 @@ export default function MainThread() {
                                             <p>Threads: {childThread.children.length}</p>
                                         </div>
                                         <div class="col-md-3 border" style={{"display": "flex", "flex-direction": "row", "alignItems": "center"}}>
-                                            <p>Last update: {childThread.lastUpdated}</p>
+                                            <p>Last update: {childThread.lastUpdated.split('T')[0]}</p>
                                         </div>
                                     </div>
                                     
