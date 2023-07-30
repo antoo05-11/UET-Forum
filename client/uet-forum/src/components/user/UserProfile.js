@@ -10,6 +10,7 @@ export default function UserProfile() {
     const [name, setName] = useState("");
     const [posts, setPosts] = useState([]);
     const [answers, setAnswers] = useState([]);
+    const [id, setId] = useState("");
     useEffect(() => {
         axios.get(`http://localhost:5050/api/user/view`,{
             headers: {
@@ -23,6 +24,7 @@ export default function UserProfile() {
                 setName(response.data.user.username)
                 setPosts(response.data.posts)
                 setAnswers(response.data.answers)
+                setId(response.data.user._id)
             })
     }, [])
     return (
@@ -32,7 +34,7 @@ export default function UserProfile() {
                 </div>
                 <div className="col-md-10">
                     <div className="d-flex flex-column justify-content-center" style={{ "display": "flex", "alignItems": "center" }}>
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png" style={{ "width": "100px", "height": "100px", "border": "1px solid black", "border-radius": "50%" }} />
+                        <img src = {`https://uet-forum.000webhostapp.com/imageResource/avatar/${id}.jpg`}  style={{ "width": "100px", "height": "100px", "border": "1px solid black", "border-radius": "50%" }} />
                         <h2>{name}</h2>
                         <h3>Role: {role}</h3>
                     </div>

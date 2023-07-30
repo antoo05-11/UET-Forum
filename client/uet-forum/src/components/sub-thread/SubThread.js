@@ -103,11 +103,12 @@ export default function SubThread() {
                     </div>
                     <ul style={{ "list-style-type": "none" }}>
                         {postList.map((post) =>
+                             
                             <li>
                                 <div class="container-fluid border" style={{ "height": "80px" }}>
                                     <div class="row h-100">
                                         <div class="col-md-1 border d-flex" style={{"display": "flex", "flex-direction": "column", "alignItems": "center", "justifyContent": "center"}}>
-                                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png" style={{"width": "40px", "height": "40px", "border" : "1px solid black", "border-radius": "50%"}} />
+                                            <img src= {`https://uet-forum.000webhostapp.com/imageResource/avatar/${post.author}.jpg`} style={{"width": "40px", "height": "40px", "border" : "1px solid black", "border-radius": "50%"}} />
                                             
                                             <Link to ={`/user/${post.author}`}>{post.authorName}</Link>
                                         </div>
