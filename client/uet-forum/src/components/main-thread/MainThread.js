@@ -35,10 +35,10 @@ export default function MainThread() {
                                             <Link to={`/st/${childThread._id}`}>{childThread.title}</Link>
                                         </div>
                                         <div class="col-md-2 border">
-                                            <p>info</p>
+                                            <p>Threads: {childThread.children.length}</p>
                                         </div>
                                         <div class="col-md-3 border">
-                                            <p>last activity</p>
+                                            <p>Last update: {childThread.lastUpdated}</p>
                                         </div>
                                     </div>
                                     
