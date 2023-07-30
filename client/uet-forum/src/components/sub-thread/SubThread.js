@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { BsPencilSquare } from "react-icons/bs";
-
+import { useSelector} from "react-redux";
+import { UseSelector } from "react-redux";
 
 export function CreatePostModal(props) {
 
@@ -39,7 +40,9 @@ export function CreatePostModal(props) {
 
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
+    
     return (
+        
         <div class="modal" id="createPostModal">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -71,8 +74,10 @@ export default function SubThread() {
     const params = useParams();
     const [childPostList, setChildPostList] = useState([])
     const [title, setTitle] = useState("")
-
+    const isLoggedIn = useSelector(state => state.loginInfo.logged);
+    
     useEffect(() => {
+        console.log(isLoggedIn)
         axios.get(`http://localhost:5050/api/thread/${params.threadID}`)
             .then((res) => {
                 console.log(res.data);
@@ -89,7 +94,7 @@ export default function SubThread() {
                         <h3>{title} </h3>
                         <h3
                             data-toggle="modal"
-                            data-target="#createPostModal"
+                            data-target= {isLoggedIn ? "#createPostModal" : "#loginModal"}
                         >
                             <BsPencilSquare />
                         </h3>
