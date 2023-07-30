@@ -12,9 +12,9 @@ export default function ViewUserProfile() {
         }})
         .then((response) => {
             console.log(response)
-            setId(response.data._id)
-            setRole(response.data.role)
-            setName(response.data.name)
+            setId(response.data.user._id)
+            setRole(response.data.user.role)
+            setName(response.data.user.name)
         })
     },[])
     return (

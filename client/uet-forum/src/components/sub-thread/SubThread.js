@@ -77,32 +77,13 @@ export default function SubThread() {
     const isLoggedIn = useSelector(state => state.loginInfo.logged);
     
     useEffect(() => {
-        async function fetchData() {
-            try {
-                const res1 = await axios.get(`http://localhost:5050/api/thread/${params.threadID}`);
-                setTitle(res1.data.thread.title);
-                //res1 laays ra .children -> for loop
-                const children = res1.data.children;
-                let data = [];
-                for(const post of children) {
-                    const authorID = post.author;
-                    const res2 = await axios.get(`http://localhost:5050/api/user/view/${authorID}`);
-                    const element = {
-                        postId: post._id,
-                        userId: authorID,
-                        username : res2.data.user.username,
-                        title : post.title
-                    }
-                    console.log(element);
-                    data.push(element);
-                }
-                setPostList(data);
-                
-            } catch (error) {
-                console.log(error)
-            }
-        }
-        fetchData()
+        axios.get(`http://localhost:5050/api/thread/${params.threadID}`)
+        .then((res) => {
+            setPostList(res.data.children)
+            setTitle(res.data.thread.title)
+            console.log(res.data.children)
+        })
+        
     }, [])
     return (
         <div class="container-fluid">
@@ -126,7 +107,7 @@ export default function SubThread() {
                                     <div class="row h-100">
                                         <div class="col-md-1 border d-flex">
                                             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png" style={{"width": "40px", "height": "40px", "border" : "1px solid black", "border-radius": "50%"}} />
-                                            <Link to ={`/user/${post.userId}`}>{post.username}</Link>
+                                            <Link to ={`/user/${post.author}`}>{post.authorName}</Link>
                                         </div>
                                         <div class="col-md-7 border">
                                             <Link to={`/p/${post.postId}`}>{post.title}</Link>
