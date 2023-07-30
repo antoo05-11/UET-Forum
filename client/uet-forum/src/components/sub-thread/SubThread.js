@@ -91,8 +91,9 @@ export default function SubThread() {
                 <div class="col-2"></div>
                 <div class="col-8">
                     <div class="row d-flex justify-content-between">
-                        <h3>{title} </h3>
+                        <h3 class="my-4">{title} </h3>
                         <h3
+                            class="mt-4"
                             data-toggle="modal"
                             data-target= {isLoggedIn ? "#createPostModal" : "#loginModal"}
                         >
@@ -105,19 +106,19 @@ export default function SubThread() {
                             <li>
                                 <div class="container-fluid border" style={{ "height": "80px" }}>
                                     <div class="row h-100">
-                                        <div class="col-md-1 border d-flex">
+                                        <div class="col-md-1 border d-flex" style={{"display": "flex", "flex-direction": "column", "alignItems": "center", "justifyContent": "center"}}>
                                             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png" style={{"width": "40px", "height": "40px", "border" : "1px solid black", "border-radius": "50%"}} />
                                             
                                             <Link to ={`/user/${post.author}`}>{post.authorName}</Link>
                                         </div>
-                                        <div class="col-md-7 border">
+                                        <div class="col-md-7 border" style={{"display": "flex", "flex-direction": "row", "alignItems": "center", "font-size": "20px"}}>
                                             <Link to={`/p/${post._id}`}>{post.title}</Link>
                                         </div>
-                                        <div class="col-md-2 border">
-                                            <p>info</p>
+                                        <div class="col-md-2 border" style={{"display": "flex", "flex-direction": "row", "alignItems": "center", "justifyContent": "center"} }>
+                                            <p>Reply: {post.answers.length}</p>
                                         </div>
-                                        <div class="col-md-2 border">
-                                            <p>last activity</p>
+                                        <div class="col-md-2 border" style={{"display": "flex", "flex-direction": "row", "alignItems": "center", "justifyContent": "center"}}>
+                                            <p>Last activity: {post.lastUpdated}</p>
                                         </div>
                                     </div>
                                 </div>

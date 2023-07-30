@@ -31,13 +31,13 @@ export default function MainThread() {
                             <li>
                                 <div class="container-fluid border" style={{"height" : "80px"}}>
                                     <div class="row h-100">
-                                        <div class="col-md-7 border">
+                                        <div class="col-md-7 border" style={{"display": "flex", "flex-direction": "row", "alignItems": "center"}}>
                                             <Link to={`/st/${childThread._id}`} style={{"font-size": "25px"}}>{childThread.title}</Link>
                                         </div>
-                                        <div class="col-md-2 border">
+                                        <div class="col-md-2 border" style={{"display": "flex", "flex-direction": "row", "alignItems": "center"}}>
                                             <p>Threads: {childThread.children.length}</p>
                                         </div>
-                                        <div class="col-md-3 border">
+                                        <div class="col-md-3 border" style={{"display": "flex", "flex-direction": "row", "alignItems": "center"}}>
                                             <p>Last update: {childThread.lastUpdated}</p>
                                         </div>
                                     </div>
