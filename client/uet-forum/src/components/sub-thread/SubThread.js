@@ -107,10 +107,11 @@ export default function SubThread() {
                                     <div class="row h-100">
                                         <div class="col-md-1 border d-flex">
                                             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png" style={{"width": "40px", "height": "40px", "border" : "1px solid black", "border-radius": "50%"}} />
+                                            
                                             <Link to ={`/user/${post.author}`}>{post.authorName}</Link>
                                         </div>
                                         <div class="col-md-7 border">
-                                            <Link to={`/p/${post.postId}`}>{post.title}</Link>
+                                            <Link to={`/p/${post._id}`}>{post.title}</Link>
                                         </div>
                                         <div class="col-md-2 border">
                                             <p>info</p>
