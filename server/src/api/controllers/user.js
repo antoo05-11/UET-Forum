@@ -4,49 +4,46 @@ import HttpException from "../exceptions/http-exception";
 import Post from "../models/post";
 import Answer from "../models/answer";
 
-// CRUD
 export const getUser = async (req, res) => {
     const user = await User.findById(req.params.id);
     if (!user) throw new HttpException(404, "User not found");
-    let posts = [];
-    await Post.find({
-        author: user.id
-    }).then((list) => {
-        for (const foundPost of list) {
-            let post = {
-                id: foundPost.id,
-                title: foundPost.title,
-                point: foundPost.point,
-                dateTime: foundPost.dateTime
-            };
-            posts.push(post);
-        }
-    });
 
-    let answers = [];
-    await Answer.find({
-        author: user.id
-    }).then((list) => {
-        for (const foundAnswer of list) {
-            Post.findById(foundAnswer.postID)
-                .then(foundPost => {
-                    let answer = {
-                        postID: foundAnswer.postID,
-                        answerID: foundAnswer.id,
-                        title: foundPost.title,
-                        point: foundAnswer.point,
-                        dateTime: foundAnswer.lastUpdated
-                    };
-                    answers.push(answer);
-                })
-        }
-    });
+    const [postList, answerList] = await Promise.all([
+        Post.find({
+            author: user.id
+        }),
+        Answer.find({
+            author: user.id
+        }),
+    ]);
+
+    const posts = postList.map(foundPost => ({
+        id: foundPost.id,
+        title: foundPost.title,
+        point: foundPost.point,
+        dateTime: foundPost.dateTime,
+    }));
+
+    const answers = await Promise.all(
+        answerList.map(async foundAnswer => {
+            const foundPost = await Post.findById(foundAnswer.postID);
+            return {
+                postID: foundAnswer.postID,
+                answerID: foundAnswer.id,
+                title: foundPost.title,
+                point: foundAnswer.point,
+                dateTime: foundAnswer.lastUpdated,
+            };
+        })
+    );
+
     return res.status(200).json({
         user,
         posts,
         answers
     });
 };
+
 
 
 export const viewUser = async (req, res) => {

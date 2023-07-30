@@ -217,7 +217,7 @@ export const votePost = async (req, res) => {
 }
 
 export const closePost = async (req, res) => {
-    let post = await Post.findOne({ _id: postID });
+    let post = await Post.findOne({ _id: req.params.id });
     if (!post) throw new HttpException(404, "Post not found");
     if (!req.user.role.includes("admin") && post.author.toString() != req.user.id) throw new HttpException (400, "You do not have permission for this action");
     
@@ -227,7 +227,7 @@ export const closePost = async (req, res) => {
 }
 
 export const reopenPost = async (req, res) => {
-    let post = await Post.findOne({ _id: postID });
+    let post = await Post.findOne({ _id: req.params.id });
     if (!post) throw new HttpException(404, "Post not found");
     if (!req.user.role.includes("admin") && post.author.toString() != req.user.id) throw new HttpException (400, "You do not have permission for this action");
 
