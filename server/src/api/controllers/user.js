@@ -45,6 +45,15 @@ export const getUser = async (req, res) => {
     });
 };
 
+export const userShortenedView = async (req, res) => {
+    const user = await User.findById(req.params.id);
+    if (!user) throw new HttpException(404, "User not found");
+    return res.status(200).json({
+        userID: user.id,
+        name: user.name
+    })
+}
+
 
 
 export const viewUser = async (req, res) => {

@@ -9,6 +9,7 @@ import {
     findUser,
     getAllUsers,
     getUser,
+    userShortenedView,
     // deleteUser
 } from "../controllers/user";
 
@@ -25,6 +26,7 @@ userRoute.get("/view/:id", catchAsync(getUser));
 userRoute.post("/find", verifyToken, catchAsync(findUser));
 userRoute.post("/create", catchAsync(createUser));
 userRoute.get("/view", verifyToken, catchAsync(viewUser));
+userRoute.get("/shortenedView/:id", catchAsync(userShortenedView));
 userRoute.post("/update", verifyToken, catchAsync(updateUser));
 // userRoute.delete("/delele", verifyToken,catchAsync(deleteUser));
 

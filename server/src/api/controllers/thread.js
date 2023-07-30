@@ -1,9 +1,13 @@
 import Thread from "../models/thread"
 import Post from "../models/post"
 import HttpException from "../exceptions/http-exception";
+import User from "../models/user";
 
 export const getAllThread = async (req, res) => {
-    const threads = await Thread.find({ type: 1, isAlive: true });
+    const threads = await Thread.find({
+        type: 1,
+        isAlive: true
+    });
     if (!threads) throw new HttpException(404, "Thread not found");
 
     return res.status(200).json(threads);
@@ -34,9 +38,9 @@ export const getThread = async (req, res) => {
         });
     }
 
-    let children;
+    let foundChildren;
     if (thread.type == 1) {
-        children = await Thread.find({
+        foundChildren = await Thread.find({
                 "rootID": threadID,
                 "isAlive": true
             })
@@ -46,7 +50,7 @@ export const getThread = async (req, res) => {
             .skip(PAGE_LIMIT * (page - 1))
             .limit(PAGE_LIMIT);
     } else {
-        children = await Post.find({
+        foundChildren = await Post.find({
                 "rootID": threadID,
                 "isAlive": true
             })
@@ -56,6 +60,16 @@ export const getThread = async (req, res) => {
             .skip(PAGE_LIMIT * (page - 1))
             .limit(PAGE_LIMIT);
     }
+    let children = [];
+    await Promise.all(
+        foundChildren.map(async (element) => {
+            element = JSON.parse(JSON.stringify(element));
+            let user = await User.findById(element.author);
+            element.authorName = user.name;
+            children.push(element);
+        })
+    );
+
 
     return res.status(200).json({
         thread,
@@ -65,7 +79,7 @@ export const getThread = async (req, res) => {
 };
 
 export const createThread = async (req, res) => {
-    if (req.user.role.includes("student")) throw new HttpException (400, "You do not have permission for this action");
+    if (req.user.role.includes("student")) throw new HttpException(400, "You do not have permission for this action");
 
     let newThread = {
         rootID: req.body.rootID,
@@ -82,7 +96,7 @@ export const updateThread = async (req, res) => {
     if (!thread) throw new HttpException(404, "Thread not found");
     if (!thread.isAlive) throw new HttpException(400, "Thread is closed");
     if (req.user.role.includes("student") || (!req.user.role.includes("admin") && thread.author.toString() != req.user.id)) {
-        throw new HttpException (400, "You do not have permission for this action");
+        throw new HttpException(400, "You do not have permission for this action");
     };
 
     thread.title = req.body.title;
@@ -95,7 +109,7 @@ export const deleteThread = async (req, res) => {
     let thread = await Thread.findById(req.params.threadID);
     if (!thread) throw new HttpException(404, "Thread not found");
     if (req.user.role.includes("student") || (!req.user.role.includes("admin") && thread.author.toString() != req.user.id)) {
-        throw new HttpException (400, "You do not have permission for this action");
+        throw new HttpException(400, "You do not have permission for this action");
     };
 
     thread.isAlive = false;
@@ -107,7 +121,7 @@ export const reopenThread = async (req, res) => {
     let thread = await Thread.findById(req.params.threadID);
     if (!thread) throw new HttpException(404, "Thread not found");
     if (req.user.role.includes("student") || (!req.user.role.includes("admin") && thread.author.toString() != req.user.id)) {
-        throw new HttpException (400, "You do not have permission for this action");
+        throw new HttpException(400, "You do not have permission for this action");
     };
 
     thread.isAlive = true;
