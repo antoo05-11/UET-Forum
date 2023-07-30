@@ -2,7 +2,7 @@ import {
     Router
 } from "express";
 
-import { reachNotification, showNotification } from "../controllers/notification";
+import { reachNotification, showAllNotifications } from "../controllers/notification";
 
 import {
     verifyToken
@@ -12,7 +12,7 @@ import catchAsync from "../exceptions/catch-async";
 
 const notificationRoute = new Router;
 
-notificationRoute.get("/", verifyToken, catchAsync(showNotification));
-notificationRoute.get("/:post_id/:ans_id", verifyToken, catchAsync(reachNotification));
+notificationRoute.get("/", verifyToken, catchAsync(showAllNotifications));
+notificationRoute.get("/:postID/:answerID", verifyToken, catchAsync(reachNotification));
 
 export default notificationRoute;

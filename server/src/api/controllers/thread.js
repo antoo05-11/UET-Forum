@@ -1,12 +1,11 @@
 import Thread from "../models/thread"
 import Post from "../models/post"
+import HttpException from "../exceptions/http-exception";
 
 export const getAllThread = async (req, res) => {
+    const threads = await Thread.find({ type: 1, isAlive: true });
+    if (!threads) throw new HttpException(404, "Thread not found");
 
-    const threads = await Thread.find({
-        type: 1,
-        isAlive: true
-    });
     return res.status(200).json(threads);
 };
 
@@ -18,15 +17,16 @@ export const getThread = async (req, res) => {
     if (!sort) sort = "dateTime";
     let order = req.query.order;
     if (!order) order = 1;
-    let rootID = req.params.id;
+    let threadID = req.params.threadID;
 
-    const thread = await Thread.findById(rootID);
-    if (!thread.isAlive) return res.status(404);
+    const thread = await Thread.findById(threadID);
+    if (!thread) throw new HttpException(404, "Thread not found");
+    if (!thread.isAlive) throw new HttpException(400, "Thread is closed");
 
     let children;
     if (thread.type == 1) {
         children = await Thread.find({
-                "rootID": rootID,
+                "rootID": threadID,
                 "isAlive": true
             })
             .sort({
@@ -37,7 +37,7 @@ export const getThread = async (req, res) => {
         console.log(children);
     } else {
         children = await Post.find({
-                "rootID": rootID,
+                "rootID": threadID,
                 "isAlive": true
             })
             .sort({
@@ -55,6 +55,8 @@ export const getThread = async (req, res) => {
 };
 
 export const createThread = async (req, res) => {
+    if (req.user.role.includes("student")) throw new HttpException (400, "You do not have permission for this action");
+
     let newThread = {
         rootID: req.body.rootID,
         type: 2,
@@ -63,31 +65,42 @@ export const createThread = async (req, res) => {
     }
     Thread.create(newThread);
     return res.status(200).json(newThread);
-}
+};
 
 export const updateThread = async (req, res) => {
-    Thread.findById(req.params.id).then((thread) => {
-        thread.title = req.body.title;
-        thread.lastUpdated = Date.now();
-        thread.save();
-        return res.status(200).json();
-    })
-}
+    let thread = await Thread.findById(req.params.threadID);
+    if (!thread) throw new HttpException(404, "Thread not found");
+    if (!thread.isAlive) throw new HttpException(400, "Thread is closed");
+    if (req.user.role.includes("student") || (!req.user.role.includes("admin") && thread.author.toString() != req.user.id)) {
+        throw new HttpException (400, "You do not have permission for this action");
+    };
+
+    thread.title = req.body.title;
+    thread.lastUpdated = Date.now();
+    thread.save();
+    return res.status(200).json();
+};
 
 export const deleteThread = async (req, res) => {
-    Thread.findById(req.params.id).then((thread) => {
-        if (!thread) res.status(404);
-        thread.isAlive = false;
-        thread.save();
-        return res.status(200);
-    })
-}
+    let thread = await Thread.findById(req.params.threadID);
+    if (!thread) throw new HttpException(404, "Thread not found");
+    if (req.user.role.includes("student") || (!req.user.role.includes("admin") && thread.author.toString() != req.user.id)) {
+        throw new HttpException (400, "You do not have permission for this action");
+    };
+
+    thread.isAlive = false;
+    thread.save();
+    return res.status(200).json();
+};
 
 export const reopenThread = async (req, res) => {
-    Thread.findById(req.params.id).then((thread) => {
-        if (!thread) res.status(404);
-        thread.isAlive = true;
-        thread.save();
-        return res.status(200);
-    })
-}
+    let thread = await Thread.findById(req.params.threadID);
+    if (!thread) throw new HttpException(404, "Thread not found");
+    if (req.user.role.includes("student") || (!req.user.role.includes("admin") && thread.author.toString() != req.user.id)) {
+        throw new HttpException (400, "You do not have permission for this action");
+    };
+
+    thread.isAlive = true;
+    thread.save();
+    return res.status(200).json();
+};

@@ -29,37 +29,3 @@ export const verifyToken = async (req, res, next) => {
         next(e);
     }
 };
-
-export const verifyRole = (role) => {
-    return async (req, res, next) => {
-        try {
-            if (!req.user.role.includes(role)) {
-                throw new HttpException(403, "You don't have permission to access!");
-            }
-            next();
-        } catch (e) {
-            e.status = 403;
-            next(e);
-        }
-    }
-}
-
-// export const isAuthor = async (req, res, next) => {
-//     try {
-//         const noteId = req.params.id;
-//         const note = await Note.findById(noteId);
-
-//         if (!note) {
-//             throw new HttpException(404, "Note not found!");
-//         }
-
-//         if (note.user.toString() !== req.user.id) {
-//             throw new HttpException(403, "You don't have permission to access!");
-//         }
-
-//         next();
-//     } catch (e) {
-//         e.status = 403;
-//         next(e);
-//     }
-// };

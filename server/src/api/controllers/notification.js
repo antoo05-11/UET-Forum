@@ -12,7 +12,7 @@ export const pushNotification = async function(users, content) {
     await Notification.insertMany(notifications);
 };
 
-export const showNotification = async (req, res) => {
+export const showAllNotifications = async (req, res) => {
     const user = req.user;
     const notifications = await Notification.find({ "user": user });
     if (!notifications) throw new HttpException(404, "Notifications not found")
