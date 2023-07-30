@@ -22,5 +22,6 @@ export const getRank = async (req, res) => {
             total: total
         });
     }
+    result.sort((a, b) => a.total - b.total);
     return res.status(200).json(result);
 };

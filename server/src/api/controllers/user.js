@@ -5,7 +5,9 @@ import Post from "../models/post";
 import Answer from "../models/answer";
 
 export const getUser = async (req, res) => {
-    const user = await User.findById(req.params.id);
+    let userID = req.params.id;
+    if(!userID) userID = req.user.id;
+    const user = await User.findById(userID);
     if (!user) throw new HttpException(404, "User not found");
 
     const [postList, answerList] = await Promise.all([
