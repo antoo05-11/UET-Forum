@@ -126,6 +126,7 @@ export const updatePost = async (req, res) => {
 export const answerPost = async (req, res) => {
     const postID = req.params.postID;
     const post = await Post.findById(postID);
+    if (!post) throw new HttpException(404, "Post not found");
 
     let newAnswer = {
         author: req.user.id,
