@@ -27,13 +27,14 @@ export const getUser = async (req, res) => {
     const answers = await Promise.all(
         answerList.map(async foundAnswer => {
             const foundPost = await Post.findById(foundAnswer.postID);
-            return {
-                postID: foundAnswer.postID,
-                answerID: foundAnswer.id,
-                title: foundPost.title,
-                point: foundAnswer.point,
-                dateTime: foundAnswer.lastUpdated,
-            };
+            if (foundPost)
+                return {
+                    postID: foundAnswer.postID,
+                    answerID: foundAnswer.id,
+                    title: foundPost.title,
+                    point: foundAnswer.point,
+                    dateTime: foundAnswer.lastUpdated,
+                };
         })
     );
 
