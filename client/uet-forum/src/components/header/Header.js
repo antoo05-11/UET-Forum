@@ -46,8 +46,8 @@ export default function Header() {
                 Authorization: `Bearer ${window.localStorage.getItem("token")}`
             }
         }).then((res) => {
-            console.log("name: " + res.data.name);
-            dispatch(setLoginInfo({"username": res.data.name, "logged": true}));
+            console.log(res.data);
+            dispatch(setLoginInfo({"username": res.data.name, "logged": true, "userId": res.data._id}));
         }).catch((err) => {
             console.log(err)
             window.localStorage.removeItem("token");

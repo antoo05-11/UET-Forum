@@ -83,7 +83,6 @@ export default function SubThread() {
                 setTitle(res1.data.thread.title);
                 //res1 laays ra .children -> for loop
                 const children = res1.data.children;
-
                 let data = [];
                 for(const post of children) {
                     const authorID = post.author;
@@ -91,7 +90,7 @@ export default function SubThread() {
                     const element = {
                         postId: post._id,
                         userId: authorID,
-                        username : res2.data.username,
+                        username : res2.data.user.username,
                         title : post.title
                     }
                     console.log(element);
@@ -125,7 +124,7 @@ export default function SubThread() {
                             <li>
                                 <div class="container-fluid border" style={{ "height": "80px" }}>
                                     <div class="row h-100">
-                                        <div class="col-md-1 border">
+                                        <div class="col-md-1 border d-flex">
                                             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png" style={{"width": "40px", "height": "40px", "border" : "1px solid black", "border-radius": "50%"}} />
                                             <Link to ={`/user/${post.userId}`}>{post.username}</Link>
                                         </div>

@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+    userId:"",
     username: "",
     logged: false,
 }
@@ -12,6 +13,7 @@ export const loginInfoSlice = createSlice({
         setLoginInfo: (state, action) => {
             state.username = action.payload.username;
             state.logged = action.payload.logged;
+            state.userId = action.payload.userId;
         },
     },
 })
