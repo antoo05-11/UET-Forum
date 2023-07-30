@@ -82,21 +82,6 @@ export const getPost = async (req, res) => {
     });
 }
 
-export const broadcastPost = async (req, res) => {
-    // const newPost =  await createPost(req, res);
-    // console.log(newPost);
-
-    let newPost = {
-        rootID: req.body.rootID,
-        author: req.user.id,
-        title: req.body.title,
-        content: req.body.content
-    }
-
-
-}
-
-
 export const createPost = async (req, res) => {
     let newPost = {
         rootID: req.body.rootID,
