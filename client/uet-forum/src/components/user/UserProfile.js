@@ -52,7 +52,7 @@ export default function UserProfile() {
                                 <ul style={{ "list-style-type": "none", "padding": "0px" }}>
                                     {posts.map((post) =>
                                         <li>
-                                            <Link to={`p/${post.id}`}>
+                                            <Link to={`/p/${post.id}`}>
                                                 <div class="container-fluid border py-1">
                                                     <p class="text-dark">
                                                         {post.title}
@@ -82,7 +82,7 @@ export default function UserProfile() {
                                 <ul style={{ "list-style-type": "none", "padding": "0px" }}>
                                     {answers.map((answer) => 
                                         <li>
-                                            <Link to={`p/${answer.postID}`}>
+                                            <Link to={`/p/${answer.postID}`}>
                                                 <div class="container-fluid border py-1">
                                                     <p class="text-dark">
                                                         {answer.title}
