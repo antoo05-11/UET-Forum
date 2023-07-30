@@ -120,6 +120,7 @@ export function Check(props) {
 
 export default function Post() {
     const [author, setAuthor] = useState("");
+    const [id, setId] = useState("");
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [answers, setAnswers] = useState([]);
@@ -135,6 +136,7 @@ export default function Post() {
                 setAnswers(res.data.fullAns);
                 setAuthorId(res.data.post.author);
                 setTime(res.data.post.dateTime);
+                setId(res.data.post._id)
             })
     }, [])
 
@@ -161,7 +163,7 @@ export default function Post() {
                     {answers.map((answer) =>
                         <Answer author={answer.authorName} content={answer.content} id={answer.author} time={answer.lastUpdated.split('T')[0]} />
                     )}
-                    <CreateAnswer />
+                    <CreateAnswer id = {id} />
                 </div>
                 <div class="col-md-2"></div>
             </div>
