@@ -41,10 +41,11 @@ export const getUser = async (req, res) => {
     var filtered = answers.filter(function (answers) {
         return answers != null;
     });
+    answers = filtered;
     return res.status(200).json({
         user,
         posts,
-        filtered
+        answers
     });
 };
 
