@@ -4,9 +4,6 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import router from "./api/routes";
 import bodyParser from "body-parser";
-import {
-    error
-} from "console";
 
 dotenv.config();
 
@@ -68,19 +65,19 @@ const mongoose = require('mongoose');
 })();
 
 // FTP client
-const ftp = require("basic-ftp");
-const client = new ftp.Client();
-client.ftp.verbose = true
-try {
-    client.access({
-        host: process.env.FTP_HOST,
-        user: process.env.FTP_USER,
-        password: process.env.FTP_PASSWORD,
-        sercure: true
-    }).then(() => {
-        // console.log("FTP-Connected");
-        // client.uploadFrom("D:/UET-Forum/UET-Forum/server/README.md", "/public_html/imageResource/README.md");
-    })
-} catch (err) {
-    console.log(err);
-}
+// const ftp = require("basic-ftp");
+// const client = new ftp.Client();
+// client.ftp.verbose = true
+// try {
+//     client.access({
+//         host: process.env.FTP_HOST,
+//         user: process.env.FTP_USER,
+//         password: process.env.FTP_PASSWORD,
+//         sercure: true
+//     }).then(() => {
+//         // console.log("FTP-Connected");
+//         // client.uploadFrom("D:/UET-Forum/UET-Forum/server/README.md", "/public_html/imageResource/README.md");
+//     })
+// } catch (err) {
+//     console.log(err);
+// }
