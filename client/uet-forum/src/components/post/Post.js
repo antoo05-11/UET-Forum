@@ -151,7 +151,7 @@ export default function Post() {
                     <div class="container-fulid">
                         <div class="row mt-5">
                             <div class="col-md-2 bg-secondary" style={{"display": "flex", "flex-direction": "column", "alignItems": "center", "justifyContent": "center"}}>
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png" style={{"width": "70px", "height": "70px", "border" : "1px solid black", "border-radius": "50%"}} />
+                            <img src={`https://uet-forum.000webhostapp.com/imageResource/avatar/${authorId}.jpg`} style={{"width": "70px", "height": "70px", "border" : "1px solid black", "border-radius": "50%"}} />
                                 <p><Link className="text-white" to={`/user/${authorId}`} >{author}</Link></p>
                             </div>
                             <div class="col-md-9 border">
