@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 export default function Ranking() {
     const [rankingList, setRankingList] = useState([]);
@@ -32,7 +33,9 @@ export default function Ranking() {
                             {rankingList.map((user, index) => (
                                 <tr>
                                     <td>{index + 1}</td>
-                                    <td>{user.name}</td>
+                                    <td>
+                                        <Link to={`/user/${user.userID}`}>{user.name}</Link>
+                                    </td>
                                     <td>{user.reputation}</td>
                                     <td>{user.postsNum}</td>
                                     <td>{user.ansNum}</td>

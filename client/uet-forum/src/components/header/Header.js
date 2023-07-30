@@ -47,7 +47,7 @@ export default function Header() {
             }
         }).then((res) => {
             console.log(res.data);
-            dispatch(setLoginInfo({"username": res.data.user.username, "logged": true, "userId": res.data._id}));
+            dispatch(setLoginInfo({"username": res.data.user.username, "logged": true, "userId": res.data.user._id}));
         }).catch((err) => {
             console.log(err)
             window.localStorage.removeItem("token");

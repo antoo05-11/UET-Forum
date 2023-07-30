@@ -8,11 +8,13 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
+import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi"
+
 export function Check(props) {
     const navigation = useNavigate();
     const [title, setTitle] = useState(props.title);
     const [content, setContent] = useState(props.content);
-    
+
     function handleTitleOnChange(e) {
         setTitle(e.target.value);
     }
@@ -21,7 +23,7 @@ export function Check(props) {
         setContent(e.target.value);
     }
 
-    function edit(){
+    function edit() {
         console.log("edit");
         const data = {
             "title": title,
@@ -32,26 +34,25 @@ export function Check(props) {
                 Authorization: `Bearer ${window.localStorage.getItem("token")}`
             }
         })
-        .then((res) => 
-        {
-            console.log("alsdkfjads");
-            window.location.reload();
-        })
-        .catch(() => {
-            console.log("error");
-        })
+            .then((res) => {
+                console.log("alsdkfjads");
+                window.location.reload();
+            })
+            .catch(() => {
+                console.log("error");
+            })
     }
 
     function deletePost() {
         console.log(`http://localhost:5050/api/post/${props.postId}/close`);
-        axios.put(`http://localhost:5050/api/post/${props.postId}/close`, {} ,{
+        axios.put(`http://localhost:5050/api/post/${props.postId}/close`, {}, {
             headers: {
                 Authorization: `Bearer ${window.localStorage.getItem("token")}`
             }
         })
-        .then((res) => {
-            navigation('/');
-        })
+            .then((res) => {
+                navigation('/');
+            })
 
     }
 
@@ -62,7 +63,7 @@ export function Check(props) {
                 <p class="dropdown-toggle"
 
                     id="dropdownMenuButton" data-toggle="dropdown">
-                    👻
+                    <PiDotsThreeOutlineVerticalFill />
                 </p>
                 <div class="dropdown-menu">
                     <p class="dropdown-item" data-toggle="modal" data-target="#editPostModal">Edit</p>
@@ -149,21 +150,25 @@ export default function Post() {
                 <div class="col-md-8">
                     <div class="container-fulid">
                         <div class="row mt-5">
-                            <div class="col-md-2 bg-secondary">
+                            <div class="col-md-2 bg-secondary" style={{"display": "flex", "flex-direction": "column", "alignItems": "center", "justifyContent": "center"}}>
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png" style={{"width": "70px", "height": "70px", "border" : "1px solid black", "border-radius": "50%"}} />
                                 <p><Link to={`/user/${authorId}`} >{author}</Link></p>
                             </div>
-                            <div class="col-md-10 border">
+                            <div class="col-md-9 border">
                                 <p>{time.split('T')[0]}</p>
                                 <h1>{title}</h1>
                                 <p>{content}</p>
-                                <Check authorId={authorId} title={title} content={content} postId={params.threadID} />
+                                
+                            </div>
+                            <div class="col-md-1">
+                            <Check authorId={authorId} title={title} content={content} postId={params.threadID} />
                             </div>
                         </div>
                     </div>
                     {answers.map((answer) =>
                         <Answer author={answer.authorName} content={answer.content} id={answer.author} time={answer.lastUpdated.split('T')[0]} />
                     )}
-                    <CreateAnswer id = {id} />
+                    <CreateAnswer id={id} />
                 </div>
                 <div class="col-md-2"></div>
             </div>
