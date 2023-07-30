@@ -1,13 +1,51 @@
 import User from "../models/user";
 import bcrypt from "bcryptjs";
 import HttpException from "../exceptions/http-exception";
+import Post from "../models/post";
+import Answer from "../models/answer";
 
 // CRUD
 export const getUser = async (req, res) => {
     const user = await User.findById(req.params.id);
     if (!user) throw new HttpException(404, "User not found");
+    let posts = [];
+    await Post.find({
+        author: user.id
+    }).then((list) => {
+        for (const foundPost of list) {
+            let post = {
+                id: foundPost.id,
+                title: foundPost.title,
+                point: foundPost.point,
+                dateTime: foundPost.dateTime
+            };
+            posts.push(post);
+        }
+    });
 
-    return res.status(200).json(user);
+    let answers = [];
+    await Answer.find({
+        author: user.id
+    }).then((list) => {
+        for (const foundAnswer of list) {
+            Post.findById(foundAnswer.postID)
+                .then(foundPost => {
+                    let answer = {
+                        postID: foundAnswer.postID,
+                        answerID: foundAnswer.id,
+                        title: foundPost.title,
+                        point: foundAnswer.point,
+                        dateTime: foundAnswer.lastUpdated
+                    };
+                    answers.push(answer);
+                })
+        }
+    });
+    return res.status(200).json({
+        user,
+        posts,
+        answers
+    });
 };
 
 
@@ -21,7 +59,9 @@ export const createUser = async (req, res) => {
         password
     } = req.body;
 
-    const existingUser = await User.findOne({ username });
+    const existingUser = await User.findOne({
+        username
+    });
     if (existingUser) throw new HttpException(400, "Username is duplicated");
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -48,7 +88,7 @@ export const updateUser = async (req, res) => {
     const user = await User.findById(req.user._id);
 
     user.name = name;
-    
+
     const roleEnumValues = User.schema.path('role').enumValues;
     if (roleEnumValues.includes(role)) {
         user.role = role;
