@@ -72,18 +72,38 @@ export function CreatePostModal(props) {
 
 export default function SubThread() {
     const params = useParams();
-    const [childPostList, setChildPostList] = useState([])
+    const [postList, setPostList] = useState([])
     const [title, setTitle] = useState("")
     const isLoggedIn = useSelector(state => state.loginInfo.logged);
     
     useEffect(() => {
-        console.log(isLoggedIn)
-        axios.get(`http://localhost:5050/api/thread/${params.threadID}`)
-            .then((res) => {
-                console.log(res.data);
-                setChildPostList(res.data.children);
-                setTitle(res.data.thread.title);
-            })
+        async function fetchData() {
+            try {
+                const res1 = await axios.get(`http://localhost:5050/api/thread/${params.threadID}`);
+                setTitle(res1.data.thread.title);
+                //res1 laays ra .children -> for loop
+                const children = res1.data.children;
+
+                let data = [];
+                for(const post of children) {
+                    const authorID = post.author;
+                    const res2 = await axios.get(`http://localhost:5050/api/user/view/${authorID}`);
+                    const element = {
+                        postId: post._id,
+                        userId: authorID,
+                        username : res2.data.username,
+                        title : post.title
+                    }
+                    console.log(element);
+                    data.push(element);
+                }
+                setPostList(data);
+                
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        fetchData()
     }, [])
     return (
         <div class="container-fluid">
@@ -101,15 +121,16 @@ export default function SubThread() {
                         <CreatePostModal rootID={params.threadID}/>
                     </div>
                     <ul style={{ "list-style-type": "none" }}>
-                        {childPostList.map((childPost) =>
+                        {postList.map((post) =>
                             <li>
                                 <div class="container-fluid border" style={{ "height": "80px" }}>
                                     <div class="row h-100">
                                         <div class="col-md-1 border">
-                                            <p>userInfo</p>
+                                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png" style={{"width": "40px", "height": "40px", "border" : "1px solid black", "border-radius": "50%"}} />
+                                            <Link to ={`/user/${post.userId}`}>{post.username}</Link>
                                         </div>
                                         <div class="col-md-7 border">
-                                            <Link to={`/p/${childPost._id}`}>{childPost.title}</Link>
+                                            <Link to={`/p/${post.postId}`}>{post.title}</Link>
                                         </div>
                                         <div class="col-md-2 border">
                                             <p>info</p>
