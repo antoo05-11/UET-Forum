@@ -19,9 +19,20 @@ export const getThread = async (req, res) => {
     if (!order) order = 1;
     let threadID = req.params.threadID;
 
-    const thread = await Thread.findById(threadID);
+    const thread = await Thread.findById(rootID);
     if (!thread) throw new HttpException(404, "Thread not found");
     if (!thread.isAlive) throw new HttpException(400, "Thread is closed");
+
+    let threadRoots = [];
+    if (thread.rootID) {
+        await Thread.findById(thread.rootID).then((thread) => {
+            threadRoots.push(thread);
+            if (thread.rootID != null)
+                Thread.findById(thread.rootID).then(thread => {
+                    threadRoots.push(thread);
+                });
+        });
+    }
 
     let children;
     if (thread.type == 1) {
@@ -34,7 +45,6 @@ export const getThread = async (req, res) => {
             })
             .skip(PAGE_LIMIT * (page - 1))
             .limit(PAGE_LIMIT);
-        console.log(children);
     } else {
         children = await Post.find({
                 "rootID": threadID,
@@ -45,11 +55,11 @@ export const getThread = async (req, res) => {
             })
             .skip(PAGE_LIMIT * (page - 1))
             .limit(PAGE_LIMIT);
-        console.log(children);
     }
 
     return res.status(200).json({
         thread,
+        threadRoots,
         children
     });
 };
