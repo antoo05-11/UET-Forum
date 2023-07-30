@@ -127,6 +127,10 @@ export default function Post() {
     const [answers, setAnswers] = useState([]);
     const [authorId, setAuthorId] = useState("");
     const [time, setTime] = useState("");
+    const [root1, setRoot1] = useState("");
+    const [root2, setRoot2] = useState("");
+    const [root1ID, setRoot1ID] = useState("");
+    const [root2ID, setRoot2ID] = useState("");
     const params = useParams();
     useEffect(() => {
         axios.get(`http://localhost:5050/api/post/${params.threadID}`)
@@ -138,6 +142,10 @@ export default function Post() {
                 setAuthorId(res.data.post.author);
                 setTime(res.data.post.dateTime);
                 setId(res.data.post._id)
+                setRoot1(res.data.roots[1].title);
+                setRoot2(res.data.roots[0].title);
+                setRoot1ID(res.data.roots[1]._id);
+                setRoot2ID(res.data.roots[0]._id);
             })
     }, [])
 
@@ -148,8 +156,13 @@ export default function Post() {
             <div class="row">
                 <div class="col-md-2"></div>
                 <div class="col-md-8">
+                <ul class="breadcrumb bg-white">
+                        <li class="breadcrumb-item"><a href="/">Forum</a></li>
+                        <li class="breadcrumb-item"><a href={`/mt/${root1ID}`}>{root1}</a></li>
+                        <li class="breadcrumb-item"><a href={`/st/${root2ID}`}>{root2}</a></li>
+                    </ul>
                     <div class="container-fulid">
-                        <div class="row mt-5">
+                        <div class="row mt-4">
                             <div class="col-md-2 bg-secondary" style={{"display": "flex", "flex-direction": "column", "alignItems": "center", "justifyContent": "center"}}>
                             <img src={`https://uet-forum.000webhostapp.com/imageResource/avatar/${authorId}.jpg`} style={{"width": "70px", "height": "70px", "border" : "1px solid black", "border-radius": "50%"}} />
                                 <p><Link className="text-white" to={`/user/${authorId}`} >{author}</Link></p>
