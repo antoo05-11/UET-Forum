@@ -24,7 +24,7 @@ export default function MainThread() {
             <div class="row">
                 <div class="col-2"></div>
                 <div class="col-8">
-                    <h3>{title}</h3>
+                    <h3 className="mt-4">{title}</h3>
                     <br />
                     <ul style={{"list-style-type": "none"}}>
                         {childThreadList.map((childThread) =>
@@ -32,7 +32,7 @@ export default function MainThread() {
                                 <div class="container-fluid border" style={{"height" : "80px"}}>
                                     <div class="row h-100">
                                         <div class="col-md-7 border">
-                                            <Link to={`/st/${childThread._id}`}>{childThread.title}</Link>
+                                            <Link to={`/st/${childThread._id}`} style={{"font-size": "25px"}}>{childThread.title}</Link>
                                         </div>
                                         <div class="col-md-2 border">
                                             <p>Threads: {childThread.children.length}</p>

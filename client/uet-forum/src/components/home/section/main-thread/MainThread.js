@@ -10,7 +10,7 @@ export default function MainThread(props) {
             .then((res) => {
                 setChildThreadList(res.data.children);
             })
-    })
+    }, [])
     return (
         <div class="col-md-6 px-4 pt-3">
             <div class="container-fulid" style={{ height: "300px" }}>
