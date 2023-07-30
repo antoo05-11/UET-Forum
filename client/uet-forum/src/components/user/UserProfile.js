@@ -11,8 +11,12 @@ export default function UserProfile() {
     const [posts, setPosts] = useState([]);
     const [answers, setAnswers] = useState([]);
     useEffect(() => {
-        console.log(`http://localhost:5050/api/user/view/64c47c41288e7043e2c0e0f7`);
-        axios.get(`http://localhost:5050/api/user/view/64c47c41288e7043e2c0e0f7`)
+        axios.get(`http://localhost:5050/api/user/view`,{
+            headers: {
+                Authorization: `Bearer ${window.localStorage.getItem("token")}`
+            }
+        }
+        )
             .then((response) => {
                 console.log(response)
                 setRole(response.data.user.role)
