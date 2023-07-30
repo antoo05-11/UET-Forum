@@ -6,10 +6,7 @@ export default function NavBar() {
                         <a class="nav-link text-white" href="/">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="/">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="/">Contact</a>
+                        <a class="nav-link text-white" href="/ranking">Ranking</a>
                     </li>
                 </ul>
             </nav>

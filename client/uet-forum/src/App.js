@@ -3,6 +3,7 @@ import Home from './components/home/Home'
 import Header from './components/header/Header'
 import Post from './components/post/Post';
 import { useParams } from 'react-router-dom';
+import Ranking from './components/ranking/Ranking';
 
 import {
   BrowserRouter as Router,
@@ -26,6 +27,7 @@ export default function App() {
         <Route path='/p/:threadID' element={<Post />} />
         <Route path='/user' element={<UserProfile />} />
         <Route path='/user/:userID' element={<ViewUserProfile />} />
+        <Route path='/ranking' element={<Ranking />} />
       </Routes>
     </Router>
   );
