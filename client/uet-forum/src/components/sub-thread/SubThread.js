@@ -74,6 +74,7 @@ export default function SubThread() {
     const params = useParams();
     const [postList, setPostList] = useState([])
     const [title, setTitle] = useState("")
+    const [root, setRoot] = useState("")
     const isLoggedIn = useSelector(state => state.loginInfo.logged);
     
     useEffect(() => {
@@ -82,6 +83,7 @@ export default function SubThread() {
             setPostList(res.data.children)
             setTitle(res.data.thread.title)
             console.log(res.data.children)
+            setRoot(res.data.roots[0].title)
         })
         
     }, [])
@@ -92,6 +94,11 @@ export default function SubThread() {
                 <div class="col-8">
                     <div class="row d-flex justify-content-between">
                         <h3 class="my-4">{title} </h3>
+                        <ul class="breadcrumb bg-white">
+                        <li class="breadcrumb-item"><a href="/">Forum</a></li>
+                        <li class="breadcrumb-item"><a href="/">{root}</a></li>
+                        <li class="breadcrumb-item"><a href="/"></a></li>
+                    </ul>
                         <h3
                             class="mt-4"
                             data-toggle="modal"

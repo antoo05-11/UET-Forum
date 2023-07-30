@@ -29,7 +29,6 @@ export default function CreateAnswer(props) {
         })
     }
     return(
-        
             <form>
             <div class="form-group">
                <input type="text" id = "answer" class="form-control" placeholder="Answer" value = {content} onChange ={handleAnswer} />

@@ -24,6 +24,10 @@ export default function MainThread() {
             <div class="row">
                 <div class="col-2"></div>
                 <div class="col-8">
+                <ul class="breadcrumb bg-white">
+                        <li class="breadcrumb-item"><a href="/">Forum</a></li>
+                        <li class="breadcrumb-item"><a href="/"></a></li>
+                    </ul>
                     <h3 className="mt-4">{title}</h3>
                     <br />
                     <ul style={{"list-style-type": "none"}}>
